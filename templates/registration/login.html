@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	    <!-- Meta, title, CSS, favicons, etc. -->
+	    <meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	    <title>Protect4Less | Partner Login</title>
+
+	    <!-- Bootstrap -->
+	    <link href="{%  static 'css/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+	    <!-- Font Awesome -->
+	    <link href="{%  static 'css/fontawesome/font-awesome.min.css' %}" rel="stylesheet">
+	    <!-- NProgress -->
+	    <link href="{%  static 'css/nprogress/nprogress.css' %}" rel="stylesheet">
+	    <!-- Animate.css -->
+	    <!-- <link href="{%  static 'css/animate.css/animate.min.css' %}" rel="stylesheet"> -->
+	    <!-- Custom Theme Style -->
+	    <link href="{% static 'css/build/custom.min.css' %}" rel="stylesheet">
+	    <style type="text/css">
+	    	body{color: #000;}
+	    	#content form .submit, .login_content form input[type="submit"]{float: none; margin-left: 0; }
+	    	.login_wrapper{text-align: center;}
+	    	.login_form{margin-top: 20%}
+	    	.login{background-color: #fff}
+	    	.form-control {
+				height: 54px;
+				border-color: #D1D1D1;
+				box-shadow: none;
+				font-size: 16px;
+				font-family: raleway;
+				font-weight: 600;
+				color: #222;
+				padding: 0 30px;
+				display: block;
+				width: 100%;
+				border: 1px solid #ccc !important;
+				border-radius: 28px !important;
+
+			}
+			.btn {
+			    width: 100%;
+			    border: 0;
+			    height: 54px;
+			    border-radius: 28px;
+			    background-color: #E50019;
+			    font-family: raleway;
+			    font-weight: bold;
+			    font-size: 16px;
+			}
+			.btn-primary:hover, .CustomBtn a:hover {
+			    background-color: #A80819;
+				border-color: #A80819;
+			}
+			.alert-danger {
+				color: #a94442;
+				background-color: #f2dede;
+				border-color: #ebccd1;
+			}
+	    </style>
+  	</head>
+
+  	<body class="login">
+	    <div>
+			<a class="hiddenanchor" id="signup"></a>
+			<a class="hiddenanchor" id="signin"></a>
+			
+	      	<div class="login_wrapper">
+	      		<img src="{% static '/images/protect4less_transparent.png'%}">
+	        	<div class="animate form login_form">
+	        		<div style="color:red">
+	        		{% for error in form.non_field_errors %}
+	        			<div class="alert alert-danger" id="no-user-error" style="display: block;" role="alert">{{ error }}</div>
+	        		{% endfor %}
+	        		</div>
+		          	<section class="login_content">
+	            	  	<form method="POST" action="" name="loginform" id="loginform">
+		        	 		{% csrf_token %}
+		              		<h1>Partner Login</h1>
+							<div>
+								<input type="text" name="username" class="form-control" placeholder="Username" required="" />
+								{{ form.username.errors }}
+							</div>
+							<div>
+								<input type="password" name="password" class="form-control" placeholder="Password" required="" />
+								{{ form.password.errors }}
+							</div>
+		              		<div>
+		                		<!-- <a class="btn btn-default submit" href="index.html">Log in</a> -->
+		                		<input class="btn btn-default btn-primary submit" value="Log in" type="submit" name="submit">
+		                		<!-- <a class="reset_pass" href="#">Lost your password?</a> -->
+		              		</div>
+
+		              		<div class="clearfix"></div>
+
+		              		<div class="separator">
+		                		<div class="clearfix"></div>
+		                		<br />
+			                	<div>
+			                  		<p>© {% now "Y" %} Protect4less - Partner. All rights reserved.</p>
+			                	</div>
+		              		</div>
+		            	</form>
+		          	</section>
+	        	</div>
+	      	</div>
+	    </div>
+  	</body>
+</html>

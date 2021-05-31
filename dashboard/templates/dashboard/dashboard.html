@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+              
+            </div>
+        </div>
+        <div class="clearfix"></div>
+
+
+     	<div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="dashboard_graph x_panel">
+                  <div class="row x_title">
+                    <div class="col-md-9">
+                        <h3>Dashboard</h3>
+                    </div>
+                    <div class="col-md-3">
+                	<form class="form-horizontal form-label-left" action="" method="POST">
+                		{% csrf_token %}
+                      <div id="reportrange" class="pull-left" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                        <span>{% if request.POST.dateRangPicker %}{{ request.POST.dateRangPicker }}{% else %}Today{% endif %}</span> <b class="caret"></b>
+                      </div>
+                      <input type="hidden" name="startDate" value="{{ request.POST.startDate }}" id="startDate"/>
+                    	<input type="hidden" name="endDate" value="{{ request.POST.endDate }}" id="endDate"/>
+                   	 <input type="hidden" name="dateRangPicker" value="{{ request.POST.dateRangPicker }}" id="dateRangPicker"/>  
+
+                    <button type="submit" class="btn btn-success" style="float:right">Submit</button>
+                    </form>
+                    </div>
+                  </div>
+                  <div class="x_content">
+                    <div class="demo-container">
+                     	<div class="x_content">
+	                        <table class="table table-hover table-bordered">
+	                            <thead>
+	                                <tr>
+	                                    <!-- <th>Total Acquisition</th>
+	                                    <th>Total Revenue</th>
+	                                    <th>Total Commisson</th> -->
+                                      <th>Total Plans Sold</th>
+                                      <th>Told Renewals</th>
+                                      <th>Total Revenue</th>
+
+                                      {% if retailer_mis_user_id is not 0%}
+                                      <th>Total Master Commission</th>
+                                      <th>Total Retailer Commission</th>
+                                      <th>Total Commission</th>
+                                      
+                                      {% else %}
+                                      <th>Total Commission Earned</th>
+                                      {% endif %}
+	                                </tr>
+	                            </thead>
+	                            <tbody>
+	                                <!-- [{'ps_id': 5, 'ps_mis_user_id': 2, 'ps_cmp_id': 5, 'ps_adnetwork_id': 2, 'ps_prod_id': 1, 'ps_cat_id': 1, 'ps_date': datetime.datetime(2020, 2, 2, 13, 0), 'ps_make': 'ALCATEL', 'ps_model': '1s', 'ps_geo': 'UAE', 'ps_plan': 'monthly', 'ps_price': 11.0, 'ps_unit': 'AED', 'ps_commission_percentage': 30, 'ps_total_acq': 1, 'ps_total_commisson': 3.3, 'ps_addedon': datetime.datetime(2020, 2, 3, 17, 4, 2), 'ps_updatedon': datetime.datetime(2020, 2, 3, 17, 4, 2)}] -->
+	                                {% if dashboard_summary_data|length > 0 %}
+	                                    {% for data in dashboard_summary_data %}
+	                                    <tr>
+	                                        <td><b>{% if data.total_acquisition and data.total_acquisition is not None %}{{ data.total_acquisition }}{% else %}0{% endif %}</b></td>
+	                                        <!-- <td><b>{% if data.total_revenue and data.total_revenue is not None %}{{  data.ps_unit }} {{ data.total_revenue }}{% else %}0{% endif %}</b></td> -->
+                                          <td><b>0</b></td>
+                                          <td><b>{% if data.total_revenue and data.total_revenue is not None %}{{  data.ps_unit }} {{ data.total_revenue }}{% else %}0{% endif %}</b></td>
+
+                                          {% if retailer_mis_user_id is not 0%}
+                                          <td><b>{% if data.ps_master_commisson and data.ps_master_commisson is not None %}{{  data.ps_unit }}  {{ data.ps_master_commisson }}{% else %}0{% endif %}</b></td>
+                                          <td><b>{% if data.ps_commisson and data.ps_commisson is not None %}{{  data.ps_unit }}  {{ data.ps_commisson }}{% else %}0{% endif %}</b></td>
+                                          <td><b>{% if data.total_commission and data.total_commission is not None %}{{  data.ps_unit }}  {{ data.total_commission }}{% else %}0{% endif %}</b></td>
+                                          {% else %}
+
+
+	                                        <td><b>{% if data.total_commission and data.total_commission is not None %}{{  data.ps_unit }}  {{ data.total_commission }}{% else %}0{% endif %}</b></td>
+                                          {% endif %}
+	                                    </tr>
+	                                    {% endfor %}
+	                                {% else %}
+                                  <tr> <td colspan="3" style="text-align: center;">No data available in table</td></tr>
+                                  {% endif%}
+	                            </tbody>
+	                        </table>
+                    	</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+	 	</div>
+
+
+        
+        
+        
+    </div>
+</div>
+{% endblock content %}
+{% block extra_scripts %}
+<script src="{% static 'js/moment/moment.min.js' %}"></script>
+<script src="{% static 'js/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
+<script src="{% static 'js/datatables.net-scroller/js/dataTables.scroller.min.js' %}"></script>
+
+<script src="{% static 'js/jszip/dist/jszip.min.js' %}"></script>
+<script src="{% static 'js/pdfmake/build/pdfmake.min.js' %}"></script>
+<script src="{% static 'js/pdfmake/build/vfs_fonts.js' %}"></script>
+<script src="{% static 'js/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+<!-- <script src="{% static 'js/custom/custom.min.js' %}"></script> -->
+<script type="text/javascript">
+    $(function() {
+
+        // $('#reportrange span').html( 'Today');
+/*
+        $('#reportrange').on('show.daterangepicker', function() {
+          console.log("show event fired");
+        });*/
+
+        //$('#reportrange_right span').html(moment().startOf('month').format('MMMM D, YYYY') + ' - ' + moment().endOf('month').format('MMMM D, YYYY'));
+
+
+        $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+            $("#dateRangPicker").val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format('MMMM D, YYYY'));
+            $("#startDate").val(picker.startDate.format('YYYY-MM-DD'));
+            $("#endDate").val(picker.endDate.format('YYYY-MM-DD'));
+        });
+    });
+        
+
+
+</script>
+{% endblock extra_scripts %}

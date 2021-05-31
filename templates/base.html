@@ -1,0 +1,27 @@
+{% load static %}
+{% include "header.html" %}	
+<body class="nav-md">
+	<div class="container body">
+	<div class="main_container">
+		<div class="col-md-3 left_col">
+			{% include "left.html" %}
+			<!-- top navigation -->
+			{% include "topnav.html" %}
+			<!-- /top navigation -->
+			<!-- page content -->
+		 	{% block content %}
+    		{% endblock content %}
+			<!-- /page content -->
+			<!-- footer content -->
+			{% include "footer.html" %}
+			<!-- /footer content -->
+		</div>
+	</div>
+	{% include "scripts.html" %}
+
+	{% block extra_scripts %}
+	{% endblock extra_scripts %}
+
+	<script src="{% static 'js/build/custom.js' %}"></script>
+</body>
+</html>
