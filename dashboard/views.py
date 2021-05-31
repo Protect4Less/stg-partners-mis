@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from backend.dao.DashboardSummaryDAO import DashboardSummaryDAO
+from .helper import *
 
 def logout_view(request):
 	logout(request)
@@ -11,6 +12,12 @@ def logout_view(request):
 def dashboard(request):
 	# return redirect('sales:statistics')
 	start_date,end_date = '',''
+
+	#Store the Partner Code in Session based on User Id
+
+	if 'partner_code' not in request.session:
+		print('**********************')
+		set_partner_code(request)
 
 	if request.method == 'POST':
 		start_date = request.POST.get("startDate",'')

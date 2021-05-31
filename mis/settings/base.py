@@ -40,7 +40,7 @@ INSTALLED_APPS = [
 	'dashboard',
     'sales',
     'pages',
-    
+    'policy'
 ]
 
 MIDDLEWARE = [

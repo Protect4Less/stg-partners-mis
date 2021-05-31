@@ -9,6 +9,8 @@ urlpatterns = [
 	re_path('sales/', include('sales.urls')),
 	re_path('pages/', include('pages.urls')),
     re_path('login/', LoginView.as_view(), name='login'),
+	re_path('policy/', include('policy.urls')),
+
 ]
 
 if settings.DEBUG:
