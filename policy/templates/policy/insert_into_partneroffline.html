@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+ <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Policy >> Initiate Policy</h3>
+              </div>
+
+             
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="row">
+
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_content">
+                        <br />
+                        <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" action="" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="invoice_number">Invoice Number <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" id="invoice_number" name="invoice_number" class="form-control col-md-7 col-xs-12">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sku">SKU <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" id="sku" name="sku" class="form-control col-md-7 col-xs-12">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="location">Location <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" id="location" name="location" class="form-control col-md-7 col-xs-12">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="device">Device <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <select class="form-control" id="device" name="device">
+                                    <option>Choose Device</option>
+                                    <option>Consumer Electronics</option>
+                                    <option>Home Appliances - Non-Portable</option>
+                                    <option>Desktops</option>
+                                    <option>Printers</option>
+                                    <option>Scanners</option>
+                                    <option>Laptops</option>
+                                    <option>Notebooks</option>
+                                    <option>Netbooks</option>
+                                    <option>Tablets</option>
+                                    <option>Telecoms</option>
+                                    <option>Mobile Phones</option>
+                                    <option>Smartphones</option>
+                                    <option>Phablets</option>
+                                    <option>White Goods</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sub_device">Sub Device <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" id="sub_device" name="sub_device" class="form-control col-md-7 col-xs-12">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="brand">Brand <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" id="brand" name="brand" class="form-control col-md-7 col-xs-12">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="model">Model <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" id="model" name="model" class="form-control col-md-7 col-xs-12">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="purchase_date">Purchase Date <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 input-group date" id='myDatepicker'>
+                            <input type="text" id="purchase_date" name="purchase_date" class="form-control col-md-7 col-xs-12">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first_name">First Name <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" id="first_name" name="first_name" class="form-control col-md-7 col-xs-12">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last_name">Last Name <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" id="last_name" name="last_name" class="form-control col-md-7 col-xs-12">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email_id" class="control-label col-md-3 col-sm-3 col-xs-12">Email ID <span class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="email_id" name="email_id" class="form-control col-md-7 col-xs-12" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="mobile_number">Mobile Number <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" id="mobile_number" name="mobile_number" class="form-control col-md-7 col-xs-12">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="imei_serial_no">Imei / Serial Number <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" id="imei_serial_no" name="imei_serial_no" class="form-control col-md-7 col-xs-12">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="term_type">Term Type <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <select class="form-control" id="term_type" name="term_type">
+                                    <option>Choose Term Type</option>
+                                    <option>12 months EW</option>
+                                    <option>24 months EW</option>
+                                    <option>1st Year AD + 12 Months EW</option>
+                                    <option>2 Years AD + 12 Months EW</option>
+                                    <option>1 Year AD + 24 Months EW</option>
+                                    <option>2 Years AD + 24 Months EW</option>
+                                    <option>12 months EW UAE And India Primary Plus 12 Months</option>
+                                    <option>12 months EW UAE And India Primary Plus 24 Months</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="device_value">Device Value <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" id="device_value" name="device_value" class="form-control col-md-7 col-xs-12">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="device_currency">Device Currency <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" id="device_currency" name="device_currency" class="form-control col-md-7 col-xs-12">
+                            </div>
+                        </div>                        
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button class="btn btn-primary" type="reset">Reset</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+{% endblock content %}
+{% block extra_scripts %}
+<!-- Parsley -->
+<script src="{% static 'js/parsleyjs/dist/parsley.min.js'%}"></script>
+<!-- <script src="{% static 'js/moment/moment.min.js' %}"></script>
+<script src="{% static 'js/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'js/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
+<script src="{% static 'js/datatables.net-scroller/js/dataTables.scroller.min.js' %}"></script>
+
+<script src="{% static 'js/jszip/dist/jszip.min.js' %}"></script>
+<script src="{% static 'js/pdfmake/build/pdfmake.min.js' %}"></script>
+<script src="{% static 'js/pdfmake/build/vfs_fonts.js' %}"></script>
+<script src="{% static 'js/bootstrap-daterangepicker/daterangepicker.js' %}"></script> -->
+<!-- <script src="{% static 'js/custom/custom.min.js' %}"></script> -->
+
+
+    <!-- jQuery -->
+    <!-- <script src="../vendors/jquery/dist/jquery.min.js"></script> -->
+    <!-- Bootstrap -->
+    <!-- <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script> -->
+    <!-- FastClick -->
+    <!-- <script src="../vendors/fastclick/lib/fastclick.js"></script> -->
+    <!-- NProgress -->
+  <!--   <script src="{% static 'js/nprogress/nprogress.js' %}"></script> -->
+    <!-- jQuery Smart Wizard -->
+    <script src="{% static 'js/jQuery-Smart-Wizard/jquery.smartWizard.js' %}"></script>
+    <!-- Custom Theme Scripts -->
+    <!-- <script src="../build/js/custom.min.js"></script> -->
+
+
+
+<script type="text/javascript">
+    // $(function() {
+
+    //     $('#datatable').dataTable( {
+    //         "searching": false
+    //     } );
+    //     // $('#reportrange span').html( 'Today');
+
+    //     $('#reportrange').on('show.daterangepicker', function() {
+    //       console.log("show event fired");
+    //     });
+
+
+    //     $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+    //         $("#dateRangPicker").val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format('MMMM D, YYYY'));
+    //         $("#startDate").val(picker.startDate.format('YYYY-MM-DD'));
+    //         $("#endDate").val(picker.endDate.format('YYYY-MM-DD'));
+    //     });
+    // });
+        
+
+
+</script>
+{% endblock extra_scripts %}
