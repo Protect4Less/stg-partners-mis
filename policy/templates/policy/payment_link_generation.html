@@ -1,7 +1,28 @@
 {% extends "base.html" %}
 {% load static %}
-{% block content %}
 
+{% block extra_head %}
+
+{% endblock %}
+
+{% block content %}
+<style type="text/css">
+    .form-group{
+        margin-bottom: 2%;
+    }
+    #price-display{font-size: 26px;}
+    #plan-rice{font-size: 24px; font-weight: bold; color: red;}
+    .bootstrap-select .dropdown-menu li a span.text{font-size: 18px;}
+    .copyToken{border: 0; box-shadow: 0px 0px 0px; background: transparent; font-size: 20px; padding: 0 0 0 10px;}
+    .modal-footer{border-top: 0; text-align: center;}
+    #myInput{max-width: 350px; width: 350px;} 
+    .features-0-12,.features-12-24{text-align: left;}
+    .project_files li{font-size: 20px !important;}
+    .fa-check-circle{color: green;}
+    .fa-check-circle{color: green;}
+    .fa-close{color: #000}
+</style>
+<div id="ajax-loader-fullpage" style="display: none"><img src="{% static 'images/loader-small.png' %}"></div>
  <!-- page content -->
         <div class="right_col" role="main">
           <div class="">
@@ -43,7 +64,7 @@
                             </span>
                           </a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="#step-3">
                             <span class="step_no">3</span>
                             <span class="step_descr">
@@ -51,141 +72,137 @@
                             <small>Payment Link</small>
                             </span>
                             </a>
-                        </li>
+                        </li> -->
                       </ul>
-                    <form class="form-horizontal form-label-left">
+                    <form class="form-horizontal form-label-left" action="" method="POST" id="policy-initiate-form">
+                        {% csrf_token %}
                       <div id="step-1" class="col-md-12 col-xs-12 text-center">
-
-
-                        <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Device</label>
+                        {% if category_info %}
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Device<span class="required">*</span></label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                <select class="form-control">
-                                    <option>Choose option</option>
-                                    <option>Option one</option>
-                                    <option>Option two</option>
-                                    <option>Option three</option>
-                                    <option>Option four</option>
+                                <select class="form-control selectpicker" name="category" id="category" data-container="body" data-live-search="true" title="Select a Device" data-hide-disabled="true">
+                                    {% for k,v in category_info.items %}
+                                    <option value="{{v.cat_id}}">{{v.cat_name}}</option>
+                                    {% endfor %}
+                            </select>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Brand<span class="required">*</span></label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <select class="form-control selectpicker" name="brand" id="brand" data-container="body" data-live-search="true" title="Select a Brand" data-hide-disabled="true">
                                 </select>
                             </div>
                         </div>
 
-                        <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Brand</label>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Model<span class="required">*</span></label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                <select class="form-control">
-                                    <option>Choose option</option>
-                                    <option>Option one</option>
-                                    <option>Option two</option>
-                                    <option>Option three</option>
-                                    <option>Option four</option>
+                                <select class="form-control selectpicker" name="item" id="item" data-container="body" data-live-search="true" title="Select a Model" data-hide-disabled="true">
                                 </select>
                             </div>
                         </div>
 
-                        <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Model</label>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Purchase Month<span class="required">*</span></label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                <select class="form-control">
-                                    <option>Choose option</option>
-                                    <option>Option one</option>
-                                    <option>Option two</option>
-                                    <option>Option three</option>
-                                    <option>Option four</option>
+                                <select class="form-control selectpicker" name="purchase_month" id="purchase_month" data-container="body" data-live-search="true" title="Select Purchase Month" data-hide-disabled="true">
+                                    <option value="0_12">Less then 12</option>
+                                    <option value="12_24">12-24 Months</option>
                                 </select>
                             </div>
                         </div>
 
-
-                        <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Purchase Month</label>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Plan Type<span class="required">*</span></label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                <select class="form-control">
-                                    <option>Choose option</option>
-                                    <option>Option one</option>
-                                    <option>Option two</option>
-                                    <option>Option three</option>
-                                    <option>Option four</option>
+                                <select class="form-control selectpicker" name="plan_type" id="plan_type" data-container="body" data-live-search="true" title="Select Plan Type" data-hide-disabled="true">
+                                    <option value="monthly">Monthly</option>
+                                    <option value="yearly">Yearly</option>
                                 </select>
                             </div>
                         </div>
 
 
-                        
-                          <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span>
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Last Name <span class="required">*</span>
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Middle Name / Initial</label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender</label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                              <div id="gender" class="btn-group" data-toggle="buttons">
-                                <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                                  <input type="radio" name="gender" value="male"> &nbsp; Male &nbsp;
-                                </label>
-                                <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                                  <input type="radio" name="gender" value="female"> Female
-                                </label>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Birth <span class="required">*</span>
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input id="birthday" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text">
-                            </div>
-                          </div>
+                        <div class="col-md-4 col-sm-12 col-xs-12 form-group"></div>
+                        <div class="col-md-4 col-sm-12 col-xs-12 form-group">
+                            <h3 class="title-plan-feature hide">Plan Features</h3>
+                            <ul class="list-unstyled project_files features-0-12 hide">
+                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i> All Accidental & Mechanical Failures</a>
+                                </li>
+                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>Theft by Forced Entry</a>
+                                </li>
+                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i> Repair or Replacement Guaranteed</a>
+                                </li>
+                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>1 Claim/Year (Monthly Plan) & 2 Claims/Year (Yearly Plan)</a>
+                                </li>
+                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>FREE Pickup & Drop off (on Yearly Plan)</a>
+                                </li>
+                            </ul>
+                            <ul class="list-unstyled project_files features-12-24 hide">
+                                <li><a href="javascript:void(0);"><i class="fa fa-close"></i>All Accidental Damage</a></li>
+                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>All Mechanical Failures</a></li>
+                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>Theft by Forced Entry</a></li>
+                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>Repair or Replacement Guaranteed</a></li>
+                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>Unlimited Claims</a></li>
+                                <li><a href="javascript:void(0);"><i class="fa fa-close"></i>FREE Pickup & Drop off (on Yearly Plan)</a></li>
+                            </ul>
+                        </div>
 
-                        
-
+                        <div class="col-md-4 col-sm-12 col-xs-12 form-group"></div>
+                        <!-- <div>
+                            
+                            <div class="features_12_24">
+                                <h3>Plan Features</h3>
+                                
+                            </div>
+                        </div> -->
+                        <div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                        <input type="hidden" name="plan_id" id="plan_id" value="0">
+                        <span id="price-display">Your Plan Price is: </span><span id="plan-rice">0.00</span>
+                        </div>
                       </div>
                       <div id="step-2">
-                       
+                        
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Sales Person ID<span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
+                              <input type="text" id="sales_person_id" name="sales_person_id" required="required" class="form-control col-md-7 col-xs-12">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first_name">First Name <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="first_name" name="first_name" required="required" class="form-control col-md-7 col-xs-12">
                             </div>
                           </div>
                           <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Last Name <span class="required">*</span>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last_name">Last Name <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
+                              <input type="text" id="last_name" name="last_name" required="required" class="form-control col-md-7 col-xs-12">
                             </div>
                           </div>
                           <div class="form-group">
-                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Middle Name / Initial</label>
+                            <label for="mobile_no" class="control-label col-md-3 col-sm-3 col-xs-12" >Mobile no.</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name">
+                              <input id="mobile_no" class="form-control col-md-7 col-xs-12" type="text" name="mobile_no">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="email_id" class="control-label col-md-3 col-sm-3 col-xs-12">Email Id</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input id="email_id" class="form-control col-md-7 col-xs-12" type="text" name="email_id">
                             </div>
                           </div>
                       </div>
                       </form>
-                      <div id="step-3">
-                        <h2 class="StepTitle">Step 3 Content</h2>
-                        
-                      </div>
-                    
-
                     </div>
                     
                   </div>
@@ -194,66 +211,217 @@
             </div>
           </div>
         </div>
-        <!-- /page content -->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h2 class="modal-title" id="exampleModalLabel">Payment Link</h2>
+        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> -->
+      </div>
+      <div class="modal-body text-center">
+        <input type="text" value="" id="myInput">
+        <!-- The button used to copy the text -->
+        <button onclick="myFunction()" type="button" name="copyToken" value="copy" class="copyToken ui right icon button"> <i class="fa fa-clipboard"></i></button>
+
+        <div>Click on icon to copy to clipboard</div>
+      </div>
+      <div class="modal-footer text-center">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock content %}
 {% block extra_scripts %}
-<!-- <script src="{% static 'js/moment/moment.min.js' %}"></script>
-<script src="{% static 'js/datatables.net/js/jquery.dataTables.min.js' %}"></script>
-<script src="{% static 'js/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
-<script src="{% static 'js/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
-<script src="{% static 'js/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>
-<script src="{% static 'js/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
-<script src="{% static 'js/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
-<script src="{% static 'js/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
-<script src="{% static 'js/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
-<script src="{% static 'js/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>
-<script src="{% static 'js/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
-<script src="{% static 'js/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
-<script src="{% static 'js/datatables.net-scroller/js/dataTables.scroller.min.js' %}"></script>
-
-<script src="{% static 'js/jszip/dist/jszip.min.js' %}"></script>
-<script src="{% static 'js/pdfmake/build/pdfmake.min.js' %}"></script>
-<script src="{% static 'js/pdfmake/build/vfs_fonts.js' %}"></script>
-<script src="{% static 'js/bootstrap-daterangepicker/daterangepicker.js' %}"></script> -->
-<!-- <script src="{% static 'js/custom/custom.min.js' %}"></script> -->
-
-
-    <!-- jQuery -->
-    <!-- <script src="../vendors/jquery/dist/jquery.min.js"></script> -->
-    <!-- Bootstrap -->
-    <!-- <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script> -->
-    <!-- FastClick -->
-    <!-- <script src="../vendors/fastclick/lib/fastclick.js"></script> -->
-    <!-- NProgress -->
-  <!--   <script src="{% static 'js/nprogress/nprogress.js' %}"></script> -->
-    <!-- jQuery Smart Wizard -->
-    <script src="{% static 'js/jQuery-Smart-Wizard/jquery.smartWizard.js' %}"></script>
-    <!-- Custom Theme Scripts -->
-    <!-- <script src="../build/js/custom.min.js"></script> -->
-
-
-
+<script src="{% static 'js/jQuery-Smart-Wizard/jquery.smartWizard.js' %}"></script>
 <script type="text/javascript">
-    // $(function() {
 
-    //     $('#datatable').dataTable( {
-    //         "searching": false
-    //     } );
-    //     // $('#reportrange span').html( 'Today');
+function onFinishAction(){
+    $('#policy-initiate-form').submit();
+}
 
-    //     $('#reportrange').on('show.daterangepicker', function() {
-    //       console.log("show event fired");
-    //     });
+function myFunction() {
+  var copyText = document.getElementById("myInput");
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /* For mobile devices */
+  document.execCommand("copy");
+}
 
+$(function() {
 
-    //     $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-    //         $("#dateRangPicker").val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format('MMMM D, YYYY'));
-    //         $("#startDate").val(picker.startDate.format('YYYY-MM-DD'));
-    //         $("#endDate").val(picker.endDate.format('YYYY-MM-DD'));
-    //     });
-    // });
+{% if inserted_id > 0 %}
+    $('#myInput').val('https://protect4less.ae/partners/process-payment-link/{{inserted_id}}');
+    $('#exampleModal').modal('show');
+{% endif %}
+
+$('#wizard').smartWizard({
+    onFinish: onFinishAction  // triggers when Finish button is clicked
+});
+
+$("#category").change(function () {
+    $('.selectpicker').selectpicker('refresh');
+    var cat_id = $(this).val();
+    if(cat_id > 0) {
+        $("#category").val(cat_id);
+        $.ajax({
+            url: "{% url 'policy:brand-model' %}",
+            type: "POST",
+            cache: false,
+            data: {
+                'id': cat_id,
+                'ctm_id':1,
+                'slab_codes':''
+            },
+            dataType: 'json',
+            beforeSend: function(){
+                $('#brand').html('');
+                $('#ajax-loader-fullpage').show();
+            },
+            success: function (data) {
+                    // brand_list(data, brand_name, model_name)
+                    console.log(data)
+                    Object.keys(data).forEach(function(key) {
+                        make_id = data[key].make_id;
+                        make_name = data[key].make_name;
+                        make_code = data[key].make_code;
+                        $('#brand').append($('<option>',{value: make_code+":"+make_id+":"+make_name, text :make_name}));
+                    });
+                    $('.selectpicker').selectpicker('refresh');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+            },
+            complete:function(data){
+                $('#ajax-loader-fullpage').hide();
+                //setTimeout(function(){
+                    // $('#promo_code_btn').attr('disabled',false);
+                // }, 2000);
+            }
+        });
+    }    
+}).change();
+
+$("#brand").change(function () {
+    $('.selectpicker').selectpicker('refresh');
+    var brand = $(this).val();
+    console.log(brand);
+
+    if(brand.length == 0){return false; }
+    brand_arr = brand.split(':');
+    let brand_id = brand_arr[1];
+    let brand_code = brand_arr[0];
+
+    console.log(brand_arr);
+    let cat_id = $("#category").val();
+    
+    
+    $.ajax({
+            type:"POST",
+            url: "{% url 'policy:get-model' %}",
+            data:  {'category_id': cat_id, 'brand':brand_code},
+            dataType: 'json',
+            async: false,
+            beforeSend: function(){
+                $('#item').html('');
+                $('#ajax-loader-fullpage').show();
+            },
+            success : function(response) { 
+                console.log(response);
+                item_data = response.responseData
+                Object.keys(item_data).forEach(function (item) {
+                  $('#item').append($('<option>',{value: item_data[item].item_id+':'+item_data[item].item_price_slab+':'+item_data[item].item_name+':'+item_data[item].item_base_value, text : item_data[item].item_name}));
+                });
+               
+                $('.selectpicker').selectpicker('refresh');
+            },
+            error: function() {
+                alert('Error occured');
+            },
+            complete:function(data){
+                $('#ajax-loader-fullpage').hide();
+            }
+        });
         
+}).change();
 
+$("#plan_type").change(function () {
+    $('.selectpicker').selectpicker('refresh');
+    let plan_type = $(this).val();
+    console.log(plan_type);
+
+    if(plan_type == '0'){return false; }
+
+    let category = $('#category').val();
+    let item_data = $('#item').val();
+    let purchase_month = $('#purchase_month').val();
+    // item_str = item_str.split(':');
+    // console.log(item_str);
+    
+    // console.log(brand_arr);    
+    
+    $.ajax({
+            type:"POST",
+            url: "{% url 'policy:get-plan-price' %}",
+            data:  {'item_data': item_data, 'plan_type':plan_type, 'category':category, 'purchase_month':purchase_month},
+            dataType: 'json',
+            async: false,
+            beforeSend: function(){
+                $('#ajax-loader-fullpage').show();
+                $('#plan-rice').html("AED 0.00");
+                $('#plan_id').val(0);
+            },
+            success : function(response) { 
+                console.log(response);
+                item_data = response.responseData
+                $('#plan-rice').html('AED '+item_data.item_price.plan_total_price);
+                $('#plan_id').val(item_data.item_price.plan_id);
+
+
+                // Object.keys(item_data).forEach(function (item) {
+                //   $('#model').append($('<option>',{value: item_data[item].item_id+':'+item_data[item].item_price_slab+':'+item_data[item].item_name+':'+item_data[item].item_base_value, text : item_data[item].item_name}));
+                // });
+               
+                $('.selectpicker').selectpicker('refresh');
+            },
+            complete:function(data){
+                setTimeout(function(){
+                    $('#ajax-loader-fullpage').hide();
+                }, 2000);
+            },
+            error: function() {
+                $('#plan-rice').html("AED 0.00");
+                $('#plan_id').val(0);
+
+                alert('Error occured');
+            }
+        });
+        
+})
+
+$("#purchase_month").change(function () {
+    $("#plan_type").val('default').selectpicker("refresh");
+    let purchase_month = $(this).val();
+    $('.title-plan-feature').addClass('hide');
+    $('.features-0-12').addClass('hide');
+    $('.features-12-24').addClass('hide');
+    if(purchase_month == '0_12'){
+        $('.title-plan-feature').removeClass('hide');
+        $('.features-0-12').removeClass('hide');
+        $('.features-12-24').addClass('hide');
+    }
+    if(purchase_month == '12_24'){
+        $('.title-plan-feature').removeClass('hide');
+        $('.features-0-12').addClass('hide');
+        $('.features-12-24').removeClass('hide');
+    }
+});
+});
 
 </script>
 {% endblock extra_scripts %}
