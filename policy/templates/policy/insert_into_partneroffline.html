@@ -193,6 +193,7 @@
 $(function() {
     $("#category").on('change', function() {
         //alert($(this).val());return false;
+        
         var cat = $(this).val();
         $.post(url = "{% url 'policy:get-catid' %}",
         {
