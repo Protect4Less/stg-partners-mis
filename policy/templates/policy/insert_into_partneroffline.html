@@ -194,7 +194,7 @@ $(function() {
     $("#category").change(function () {
         //alert($(this).val());return false;
         var cat = $(this).val();
-        $.post("{% url 'policy:get-catid' %}",
+        $.post("{% url 'get-catid' %}",
         {
             name: cat
         },
