@@ -79,7 +79,7 @@ class PartnersDAO(object):
         sql_condition = sql_condition[:-5]
 
         cursor = connection.cursor()
-        query = "SELECT * FROM `partners_offline_policy_data` WHERE "+sql_condition
+        query = "SELECT * FROM "+config('P4L_DB_NAME')+".`partners_offline_policy_data` WHERE "+sql_condition
         print(query)
         cursor.execute(query)
         columns = [col[0] for col in cursor.description]

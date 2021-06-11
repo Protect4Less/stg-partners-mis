@@ -24,9 +24,15 @@ def initiate(request):
     # This is for intserting into PartnerOffline table
     if partner_code in ['1032']:
         if request.method == 'POST':
-            insert_into_partneroffline(request)
+            inserted_id = helper_insert_into_partneroffline(request)
+            if inserted_id is not None or inserted_id != "":
+                return redirect('policy:listings')
         template_name = 'policy/insert_into_partneroffline.html'
-        context = {}
+        category_dropdown = helper_get_category(partner_code)
+        print(":category_dropdown:",category_dropdown)
+        plan_type_dropdown = helper_plan_type(partner_code)
+        print(":plan_type_dropdown:",plan_type_dropdown)
+        context = {"category_dropdown":category_dropdown, "plan_type_dropdown":plan_type_dropdown}
         return render(request,template_name,context)
 
     exit()
@@ -138,6 +144,23 @@ def listings(request):
     partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
     if partner_code in ['1032']:
         template_name = 'policy/listings_partneroffline.html'
-        partneroffline_data = get_partneroffline_data(request)
+        partneroffline_data = helper_get_partneroffline_data(partner_code)
+        print('partneroffline_data==',partneroffline_data)
         context = {'partneroffline_data':partneroffline_data}
         return render(request,template_name,context)
+
+
+@csrf_exempt
+def get_cat_id_ajax(request):
+    print(request.POST)
+    cat_name = request.POST.get('name', None)
+
+    category_data = {}
+    error = "Invalid request" if request.method != "POST" else None
+    error = error if error is not None else "Category Name is missing" if cat_name is None or cat_name.strip() == "" else error
+
+    if error is None:
+        category_data = MasterDAO.get_category(cat_name = cat_name, cat_status_check = False)
+        if len(category_data) > 0:
+            category_data = category_data[0]
+    return JsonResponse(category_data)

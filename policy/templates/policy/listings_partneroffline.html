@@ -34,22 +34,22 @@
                             <th>Status</th>
                             </tr>
                         </thead>
-
-
                         <tbody>
                             {% if partneroffline_data|length > 0 %}
+                                {% for data in partneroffline_data %}
                                 <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                    <td>{{ data.popd_invoice_no }}</td>
+                                    <td>{{ data.popd_device }}</td>
+                                    <td>{{ data.popd_sub_device }}</td>
+                                    <td>{{ data.popd_brand }}</td>
+                                    <td>{{ data.popd_model }}</td>
+                                    <td>{{ data.popd_purchase_month }}</td>
+                                    <td>{{ data.popd_first_name }}</td>
+                                    <td>{{ data.popd_last_name }}</td>
+                                    <td>{{ data.popd_email }}</td>                                    
+                                    <td>{{ data.popd_status }}</td>
                                 </tr>
+                                {% endfor %}
                             {% endif%}
                         </tbody>
                         </table>
