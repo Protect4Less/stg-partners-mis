@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from backend.classes.InitInfo import InitInfo
 from .helper import *
 
 # Create your views here.
@@ -9,8 +10,10 @@ from .helper import *
 def initiate(request):
     # print(request.session['partner_code'])
     # print(type(request.session['partner_code']))
+    init_info =  InitInfo.init(request)
 
-    partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
+    partner_code = init_info['partner_code']
+    # partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
     print(partner_code)
     # This is for generating Payment link
     if partner_code in ['1034']:
@@ -141,18 +144,22 @@ def listings(request):
     # This is for intserting into PartnerOffline table
     #print("sess==",request.session['partner_code'])
     #print(type(request.session['partner_code']))
-    try:
-        partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
-    except Exception as e:
-        partner_code = ""
-        raise Exception("partner_code not found!")
+    init_info =  InitInfo.init(request)
+    partner_code = init_info['partner_code']
+
+    # try:
+    #     # partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
+      
+    # except Exception as e:
+    #     partner_code = ""
+    #     raise Exception("partner_code not found!")
         
     if partner_code !="" and partner_code in ['1032']:
         template_name = 'policy/listings_partneroffline.html'
         partneroffline_data = helper_get_partneroffline_data(request,partner_code)
         partneroffline_data = ""
         print('partneroffline_data==',partneroffline_data)
-        context = {'partneroffline_data':partneroffline_data}
+        context = {'partneroffline_data':partneroffline_data, 'partner_code':partner_code}
         return render(request,template_name,context)
 
 
