@@ -139,10 +139,14 @@ def get_plan_price_ajax(request):
 
 def listings(request):
     # This is for intserting into PartnerOffline table
-    print("sess==",request.session['partner_code'])
-    print(type(request.session['partner_code']))
-
-    partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
+    #print("sess==",request.session['partner_code'])
+    #print(type(request.session['partner_code']))
+    try:
+        partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
+    except Exception as e:
+        partner_code = ""
+        raise Exception("partner_code not found!")
+        
     if partner_code !="" and partner_code in ['1032']:
         template_name = 'policy/listings_partneroffline.html'
         partneroffline_data = helper_get_partneroffline_data(request,partner_code)
