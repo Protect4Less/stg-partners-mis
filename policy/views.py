@@ -150,6 +150,7 @@ def listings(request):
     if partner_code !="" and partner_code in ['1032']:
         template_name = 'policy/listings_partneroffline.html'
         partneroffline_data = helper_get_partneroffline_data(request,partner_code)
+        partneroffline_data = ""
         print('partneroffline_data==',partneroffline_data)
         context = {'partneroffline_data':partneroffline_data}
         return render(request,template_name,context)
