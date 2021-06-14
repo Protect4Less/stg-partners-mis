@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from backend.classes.InitInfo import InitInfo
 from .helper import *
 
 # Create your views here.
@@ -9,11 +10,13 @@ from .helper import *
 def initiate(request):
     # print(request.session['partner_code'])
     # print(type(request.session['partner_code']))
+    init_info =  InitInfo.init(request)
 
-    partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
+    partner_code = init_info['partner_code']
+    # partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
     print(partner_code)
     # This is for generating Payment link
-    if partner_code in ['1034']:
+    if partner_code in [1034]:
         context = helper_payment_link_generation(request)
         # print(payment_link)
         template_name = 'policy/payment_link_generation.html'
@@ -23,7 +26,7 @@ def initiate(request):
         return render(request,template_name,context)
 
     # This is for intserting into PartnerOffline table
-    if partner_code !="" and partner_code in ['1032']:
+    if partner_code !="" and partner_code in [1032]:
         if request.method == 'POST':
             inserted_id = helper_insert_into_partneroffline(request)
             if inserted_id is not None or inserted_id != "":
@@ -142,12 +145,14 @@ def listings(request):
     #print("sess==",request.session['partner_code'])
     #print(type(request.session['partner_code']))
     try:
-        partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
+        # partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
+        init_info =  InitInfo.init(request)
+        partner_code = init_info['partner_code']
     except Exception as e:
         partner_code = ""
         raise Exception("partner_code not found!")
         
-    if partner_code !="" and partner_code in ['1032']:
+    if partner_code !="" and partner_code in [1032]:
         template_name = 'policy/listings_partneroffline.html'
         partneroffline_data = helper_get_partneroffline_data(request,partner_code)
         print('partneroffline_data==',partneroffline_data)
