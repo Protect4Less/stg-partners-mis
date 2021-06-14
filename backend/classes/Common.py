@@ -16,14 +16,14 @@ class Common():
 
     #Local -> userid : partner_code
     # user_id_partner_code_dict = {
-    #     7:1034,
-    #     8:1032
+    #     7:'1034',
+    #     8:'1032'
     # }
 
     # Staging
     user_id_partner_code_dict = {
-        26:1034,
-        27:1032
+        26:'1034',
+        27:'1032'
     }
 
     #Production
