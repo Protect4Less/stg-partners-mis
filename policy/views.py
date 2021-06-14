@@ -16,7 +16,7 @@ def initiate(request):
     # partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
     print(partner_code)
     # This is for generating Payment link
-    if partner_code in [1034]:
+    if partner_code in ['1034']:
         context = helper_payment_link_generation(request)
         # print(payment_link)
         template_name = 'policy/payment_link_generation.html'
@@ -26,7 +26,7 @@ def initiate(request):
         return render(request,template_name,context)
 
     # This is for intserting into PartnerOffline table
-    if partner_code !="" and partner_code in [1032]:
+    if partner_code !="" and partner_code in ['1032']:
         if request.method == 'POST':
             inserted_id = helper_insert_into_partneroffline(request)
             if inserted_id is not None or inserted_id != "":
@@ -152,7 +152,7 @@ def listings(request):
         partner_code = ""
         raise Exception("partner_code not found!")
         
-    if partner_code !="" and partner_code in [1032]:
+    if partner_code !="" and partner_code in ['1032']:
         template_name = 'policy/listings_partneroffline.html'
         partneroffline_data = helper_get_partneroffline_data(request,partner_code)
         print('partneroffline_data==',partneroffline_data)
