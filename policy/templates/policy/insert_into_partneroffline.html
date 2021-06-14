@@ -195,7 +195,7 @@ $(function() {
         //alert($(this).val());return false;
         var cat = $(this).val();
         $.ajax({
-            url = "{% url 'get-catid' %}",
+            url = "{% url 'policy:get-catid' %}",
             type: "POST",
             cache: false,
             data: {
