@@ -2,6 +2,7 @@ from backend.dao.MasterDAO import MasterDAO
 from backend.dao.PolicyDAO import PolicyDAO
 from backend.dao.PartnersDAO import *
 from backend.classes.Common import *
+from backend.classes.InitInfo import InitInfo
 from .config import *
 
 def helper_payment_link_generation(request):
