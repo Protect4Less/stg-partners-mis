@@ -15,9 +15,9 @@ def dashboard(request):
 
 	#Store the Partner Code in Session based on User Id
 
-	if 'partner_code' not in request.session:
-		print('**********************')
-		set_partner_code(request)
+	# if 'partner_code' not in request.session:
+	# 	print('**********************')
+	# 	set_partner_code(request)
 
 	if request.method == 'POST':
 		start_date = request.POST.get("startDate",'')
