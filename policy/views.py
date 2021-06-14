@@ -151,7 +151,7 @@ def listings(request):
 
 
 @csrf_exempt
-def get_cat_id_ajax(request):
+def cat_name_id_ajax(request):
     print(request.POST)
     cat_name = request.POST.get('name', None)
 
