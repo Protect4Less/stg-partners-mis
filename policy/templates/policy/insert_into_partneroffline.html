@@ -196,7 +196,7 @@ $(function() {
         var cat = $(this).val();
         if(cat !=""){
             $.ajax({
-            url : "{% url 'policy:cat-name-id' %}",
+            url : "/policy/get-cat-name-id",
             type: "POST",
             cache: false,
             data: {
