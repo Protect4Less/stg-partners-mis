@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .helper import *
+
 # Create your views here.
 
 def initiate(request):
@@ -22,7 +23,7 @@ def initiate(request):
         return render(request,template_name,context)
 
     # This is for intserting into PartnerOffline table
-    if partner_code in ['1032']:
+    if partner_code !="" and partner_code in ['1032']:
         if request.method == 'POST':
             inserted_id = helper_insert_into_partneroffline(request)
             if inserted_id is not None or inserted_id != "":
@@ -138,13 +139,13 @@ def get_plan_price_ajax(request):
 
 def listings(request):
     # This is for intserting into PartnerOffline table
-    print(request.session['partner_code'])
+    print("sess==",request.session['partner_code'])
     print(type(request.session['partner_code']))
 
     partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
-    if partner_code in ['1032']:
+    if partner_code !="" and partner_code in ['1032']:
         template_name = 'policy/listings_partneroffline.html'
-        partneroffline_data = helper_get_partneroffline_data(partner_code)
+        partneroffline_data = helper_get_partneroffline_data(request,partner_code)
         print('partneroffline_data==',partneroffline_data)
         context = {'partneroffline_data':partneroffline_data}
         return render(request,template_name,context)
