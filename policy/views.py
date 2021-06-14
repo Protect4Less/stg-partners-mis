@@ -144,7 +144,7 @@ def listings(request):
     # This is for intserting into PartnerOffline table
     #print("sess==",request.session['partner_code'])
     #print(type(request.session['partner_code']))
-  init_info =  InitInfo.init(request)
+    init_info =  InitInfo.init(request)
     partner_code = init_info['partner_code']
 
     # try:
