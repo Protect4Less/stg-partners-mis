@@ -144,19 +144,21 @@ def listings(request):
     # This is for intserting into PartnerOffline table
     #print("sess==",request.session['partner_code'])
     #print(type(request.session['partner_code']))
-    try:
-        # partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
-        init_info =  InitInfo.init(request)
-        partner_code = init_info['partner_code']
-    except Exception as e:
-        partner_code = ""
-        raise Exception("partner_code not found!")
+  init_info =  InitInfo.init(request)
+    partner_code = init_info['partner_code']
+
+    # try:
+    #     # partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
+      
+    # except Exception as e:
+    #     partner_code = ""
+    #     raise Exception("partner_code not found!")
         
     if partner_code !="" and partner_code in ['1032']:
         template_name = 'policy/listings_partneroffline.html'
         partneroffline_data = helper_get_partneroffline_data(request,partner_code)
         print('partneroffline_data==',partneroffline_data)
-        context = {'partneroffline_data':partneroffline_data}
+        context = {'partneroffline_data':partneroffline_data, 'partner_code':partner_code}
         return render(request,template_name,context)
 
 
