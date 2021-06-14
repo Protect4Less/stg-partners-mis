@@ -194,8 +194,9 @@ $(function() {
     $("#category").on('change', function() {
         //alert($(this).val());return false;
         var cat = $(this).val();
-        $.ajax({
-            url = "{% url 'policy:get-cat-id-ajax' %}",
+        if(cat !=""){
+            $.ajax({
+            url : "{% url 'policy:get-cat-id' %}",
             type: "POST",
             cache: false,
             data: {
@@ -247,7 +248,8 @@ $(function() {
                     $('#brand').append($('<option value="0">Select a Brand</option>'));
                 }
             }
-        });       
+        });
+        }       
     });
 })
 </script>
