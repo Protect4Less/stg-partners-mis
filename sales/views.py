@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from backend.dao.PartnersSummaryDAO import PartnersSummaryDAO
 from backend.dao.DashboardSummaryDAO import DashboardSummaryDAO
-
+from backend.classes.InitInfo import InitInfo
 # Create your views here.
 # @login_required(login_url='/login')
 # def statistics(request):
@@ -30,6 +30,8 @@ from backend.dao.DashboardSummaryDAO import DashboardSummaryDAO
 def statistics(request):
 	print('\n\n\n\n-----', request.POST , '\n\n\n----')
 	start_date,category_id,plan,end_date = '','','',''
+	init_info =  InitInfo.init(request)
+	partner_code = init_info['partner_code']
 
 	categories_dropdown = PartnersSummaryDAO.get_category(column = 'cat_id,cat_name',condition={'cat_status':'active','cat_p_id':1})
 	retailer_mis_user_id = DashboardSummaryDAO.get_retailer_user_id(user_id = request.user.id)
@@ -128,7 +130,7 @@ def statistics(request):
 
 
 	template_name = 'sales/statistics.html'
-	context = {'retailer_summary':retailer_summary,'categories_dropdown':categories_dropdown,'retailer_mis_user_id':retailer_mis_user_id}
+	context = {'retailer_summary':retailer_summary,'categories_dropdown':categories_dropdown,'retailer_mis_user_id':retailer_mis_user_id, 'partner_code':partner_code}
 	#print(context)
 	# exit()
 	return render(request,template_name,context)
@@ -138,7 +140,8 @@ def statistics(request):
 def monthly_summary(request):
 	print(request.POST)
 	start_date,category_id,plan,end_date = '','','',''
-
+	init_info =  InitInfo.init(request)
+	partner_code = init_info['partner_code']
 	categories_dropdown = PartnersSummaryDAO.get_monthly_summary(column = 'cat_id,cat_name',condition={'cat_status':'active'})
 		
 	if request.method == 'POST':
@@ -150,7 +153,7 @@ def monthly_summary(request):
 	retailer_summary = PartnersSummaryDAO.get_retailer_summary(user_id = request.user.id, category_id = category_id, plan = plan,start_date = start_date, end_date = end_date)
 
 	template_name = 'sales/statistics.html'
-	context = {'retailer_summary':retailer_summary,'categories_dropdown':categories_dropdown}
+	context = {'retailer_summary':retailer_summary,'categories_dropdown':categories_dropdown,'partner_code':partner_code}
 	print(context)
 	# exit()
 	return render(request,template_name,context)

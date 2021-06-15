@@ -193,63 +193,59 @@
 $(function() {
     $("#category").on('change', function() {
         //alert($(this).val());return false;
+        
         var cat = $(this).val();
-        if(cat !=""){
-            $.ajax({
-            url : "/policy/get-cat-name-id",
-            type: "POST",
-            cache: false,
-            data: {
-                'name': cat
-            },
-            success: function (data) {
+        $.post(url = "/policy/get-cat-name-id",
+        {
+            name: cat
+        },
+        function(data, status){
             console.log(data['cat_id']);
             cat_id = data['cat_id'];
+
             if(cat_id != "") {
-                    $.ajax({
-                        url: "{% url 'policy:brand-model' %}",
-                        type: "POST",
-                        cache: false,
-                        data: {
-                            'id': cat_id,
-                            'ctm_id':1,
-                            'slab_codes':''
-                        },
-                        dataType: 'json',
-                        beforeSend: function(){
-                            $('#brand').html('');
-                            $('#brand').append($('<option value="0">Select a Brand</option>'));
-                            $('#ajax-loader-fullpage').show();
-                        },
-                        success: function (data) {
-                                // brand_list(data, brand_name, model_name)
-                                console.log(data)
-                                Object.keys(data).forEach(function(key) {
-                                    make_id = data[key].make_id;
-                                    make_name = data[key].make_name;
-                                    make_code = data[key].make_code;
-                                    $('#brand').append($('<option>',{value:make_name, text :make_name}));
-                                });
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            console.log(jqXHR);
-                            console.log(textStatus);
-                            console.log(errorThrown);
-                        },
-                        complete:function(data){
-                            $('#ajax-loader-fullpage').hide();
-                            //setTimeout(function(){
-                                // $('#promo_code_btn').attr('disabled',false);
-                            // }, 2000);
-                        }
-                    });
-                }else{
-                    $('#brand').html('');
-                    $('#brand').append($('<option value="0">Select a Brand</option>'));
-                }
+                $.ajax({
+                    url: "{% url 'policy:brand-model' %}",
+                    type: "POST",
+                    cache: false,
+                    data: {
+                        'id': cat_id,
+                        'ctm_id':1,
+                        'slab_codes':''
+                    },
+                    dataType: 'json',
+                    beforeSend: function(){
+                        $('#brand').html('');
+                        $('#brand').append($('<option value="0">Select a Brand</option>'));
+                        $('#ajax-loader-fullpage').show();
+                    },
+                    success: function (data) {
+                            // brand_list(data, brand_name, model_name)
+                            console.log(data)
+                            Object.keys(data).forEach(function(key) {
+                                make_id = data[key].make_id;
+                                make_name = data[key].make_name;
+                                make_code = data[key].make_code;
+                                $('#brand').append($('<option>',{value:make_name, text :make_name}));
+                            });
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    },
+                    complete:function(data){
+                        $('#ajax-loader-fullpage').hide();
+                        //setTimeout(function(){
+                            // $('#promo_code_btn').attr('disabled',false);
+                        // }, 2000);
+                    }
+                });
+            }else{
+                $('#brand').html('');
+                $('#brand').append($('<option value="0">Select a Brand</option>'));
             }
-        });
-        }       
+        });        
     });
 })
 </script>

@@ -27,13 +27,15 @@
 						<li><a href="{% url 'sales:statistics' %}">Statistics</a></li>
 					</ul> -->
 				</li>
-				<li>
+				{% if partner_code == '1032' %}
+                <li>
 					<a><i class="fa fa-table"></i> Policy <span class="fa fa-chevron-down"></span></a>
 					<ul class="nav child_menu">
 						<li><a href="{% url 'policy:initiate' %}">Initiate</a></li>
                         <li><a href="{% url 'policy:listings' %}">Listings</a></li>
 					</ul>
 				</li>
+				{% endif %}
 				<!-- <li>
 					<a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
 					<ul class="nav child_menu">
