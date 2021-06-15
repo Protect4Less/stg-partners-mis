@@ -11,7 +11,6 @@ def initiate(request):
     # print(request.session['partner_code'])
     # print(type(request.session['partner_code']))
     init_info =  InitInfo.init(request)
-
     partner_code = init_info['partner_code']
     # partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
     print(partner_code)
@@ -36,7 +35,7 @@ def initiate(request):
         print(":category_dropdown:",category_dropdown)
         plan_type_dropdown = helper_plan_type(partner_code)
         print(":plan_type_dropdown:",plan_type_dropdown)
-        context = {"category_dropdown":category_dropdown, "plan_type_dropdown":plan_type_dropdown}
+        context = {"category_dropdown":category_dropdown, "plan_type_dropdown":plan_type_dropdown, 'partner_code':partner_code}
         return render(request,template_name,context)
 
     exit()
