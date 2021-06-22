@@ -246,7 +246,7 @@ def helper_get_partneroffline_data(request,partner_code):
     partner_code = init_info['partner_code']
     print(":partner_code:",partner_code)
     popd_data = {}
-    partners_offline_policy_data = PartnersDAO.get_partners_offline_policy_data(column = "popd_id, popd_invoice_no, popd_sku, popd_device, popd_brand, popd_model, popd_purchase_month, popd_first_name, popd_last_name, popd_email, popd_mobile_number, popd_imei_serial_no, popd_term_type, popd_device_value, popd_device_currency, popd_s_id, popd_up_id, popd_tran_id, popd_policy_no, popd_comment, popd_status",condition={"popd_partner_code":partner_code})
+    partners_offline_policy_data = PartnersDAO.get_partners_offline_policy_data(column = "popd_id, popd_invoice_no, popd_sku, popd_device, popd_brand, popd_model, popd_purchase_month, popd_first_name, popd_last_name, popd_email, popd_mobile_number, popd_imei_serial_no, popd_term_type, popd_device_value, popd_device_currency, popd_s_id, popd_up_id, popd_tran_id, popd_policy_no, popd_comment, popd_status",condition={"popd_partner_code":partner_code},order_col='popd_addedon',order_by='DESC')
 
     if len(partners_offline_policy_data) > 0:
         popd_data = partners_offline_policy_data

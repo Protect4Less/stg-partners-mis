@@ -40,7 +40,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="location">Location <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="location" name="location" class="form-control col-md-7 col-xs-12" required="required">
+                            <input type="text" id="location" name="location" class="form-control col-md-7 col-xs-12" required="required" value="SATWA" readonly>
                             </div>
                         </div>
                         <div class="form-group">
@@ -165,7 +165,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="device_currency">Device Currency <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="device_currency" name="device_currency" class="form-control col-md-7 col-xs-12" required="required">
+                            <input type="text" id="device_currency" name="device_currency" class="form-control col-md-7 col-xs-12" required="required" value="AED" readonly>
                             </div>
                         </div>                        
                         <div class="ln_solid"></div>
@@ -195,6 +195,7 @@ $(function() {
         //alert($(this).val());return false;
         
         var cat = $(this).val();
+        $("#sub_device").val(cat)
         $.post(url = "/policy/get-cat-name-id",
         {
             name: cat

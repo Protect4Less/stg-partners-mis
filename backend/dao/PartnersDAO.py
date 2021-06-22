@@ -64,8 +64,9 @@ class PartnersDAO(object):
         return inserted_id    
 
 
-    def get_partners_offline_policy_data(column='',condition=''):
+    def get_partners_offline_policy_data(column='',condition='',order_col='',order_by=''):
         sql_condition = ""
+        orderby = ""
         for k,v in condition.items():
             if "#" in k:
                 column_name, column_condition = k.split("#")
@@ -78,8 +79,11 @@ class PartnersDAO(object):
 
         sql_condition = sql_condition[:-5]
 
+        if order_by !='' and order_col !='':
+            orderby = " ORDER BY "+order_col+ " " +order_by
+
         cursor = connection.cursor()
-        query = "SELECT * FROM "+config('P4L_DB_NAME')+".`partners_offline_policy_data` WHERE "+sql_condition
+        query = "SELECT * FROM "+config('P4L_DB_NAME')+".`partners_offline_policy_data` WHERE "+sql_condition+orderby
         print(query)
         cursor.execute(query)
         columns = [col[0] for col in cursor.description]
