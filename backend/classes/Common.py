@@ -23,7 +23,8 @@ class Common():
     # Staging
     user_id_partner_code_dict = {
         26:'1034',
-        27:'1032'
+        27:'1032',
+        28:'1035'
     }
 
     #Production
