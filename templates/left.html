@@ -32,7 +32,7 @@
 					<a><i class="fa fa-table"></i> Policy <span class="fa fa-chevron-down"></span></a>
 					<ul class="nav child_menu">
 						<li><a href="{% url 'policy:initiate' %}">Initiate</a></li>
-                        {% if partner_code == '1032' or partner_code == '1035'%}<li><a href="{% url 'policy:listings' %}">Listings</a></li>{% endif %}
+                        {% if partner_code == '1032' %}<li><a href="{% url 'policy:listings' %}">Listings</a></li>{% endif %}
 					</ul>
 				</li>
 				{% endif %}
