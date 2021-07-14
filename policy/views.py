@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from backend.classes.InitInfo import InitInfo
 from .helper import *
 import csv, io
+from django.contrib import messages
 
 # Create your views here.
 
@@ -183,11 +184,22 @@ def bulk_upload(request):
     if len(request.FILES) > 0:
 
         csv_file = request.FILES['fileToUpload']
+        if not csv_file.name.endswith('.csv'):
+            messages.error(request, 'Please upload csv file')
+            print("\n\n\n\n111111")
+            return redirect('policy:bulk-upload')
+            print("\n\n\n\n2222222")
+
         file_data = csv_file.read().decode("utf-8")
+
+
+
         lines = file_data.split("\n")
         csvData = {}
         cnt = 0
+        cnt_uploaded_data = 0
         for line in lines:
+
             if line != "":
                 if cnt != 0:
 
@@ -215,7 +227,11 @@ def bulk_upload(request):
 
                     inserted_id = PartnersDAO.insert_bsquaredwifi_offline_policy_data(data= {'bw_partner_code': '1040', 'bw_location':location,'bw_device': device, 'bw_sub_device':sub_device, 'bw_brand':brand, 'bw_model':model, 'bw_purchase_month':purchase_momnth, "bw_policy_start_date":policy_start_date, "bw_ew_start_date":ew_start_date, 'bw_first_name':first_name, 'bw_last_name':last_name, 'bw_email':email_id, 'bw_mobile_number':mobile_number, 'bw_imei_serial_no': imei_serial_no if imei_serial_no is not '' else '', 'bw_term_type':term_type,'bw_device_currency':"AED", 'bw_sku':sku })
 
+                    cnt_uploaded_data =  cnt_uploaded_data + 1
+
             cnt = cnt + 1
+
+        messages.success(request, str(cnt_uploaded_data)+ ' Data successfully uploaded')
 
     context = {}
     partner_code = '1040'

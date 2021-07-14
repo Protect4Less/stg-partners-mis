@@ -13,6 +13,19 @@
 
             </div>
             <div class="clearfix"></div>
+
+            {% for message in messages %}
+
+                   <div class="alert alert-{{  message.tags }}">
+                       <a class="close" href="#" data-dismiss="alert">×</a>
+
+                       {{ message.tags|title }} : {{ message }}
+
+                   </div>
+           {% endfor %}
+
+            <div class="clearfix"></div>
+
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12"><div class="x_panel"><div class="x_content">
                 <form action="{% url 'policy:bulk-upload' %}" method="post" enctype="multipart/form-data">
