@@ -279,4 +279,6 @@ def helper_get_bsquaredwifi_data(request,partner_code):
 
     if len(bsquaredwifi_policy_data) > 0:
         bw_data = bsquaredwifi_policy_data
-    return bw_data
+        return bw_data
+    else:
+        return "{}"
