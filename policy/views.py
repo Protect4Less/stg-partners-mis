@@ -222,5 +222,5 @@ def bulk_upload(request):
     bsquaredwifi_data = helper_get_bsquaredwifi_data(request,partner_code)
     print('bsquaredwifi_data==',bsquaredwifi_data)
     context = {'bsquaredwifi_data':bsquaredwifi_data, 'partner_code':partner_code}
-    template_name = 'policy/bulk_upload_partneroffline.html'
+    template_name = 'policy/bulk_upload_bsquaredwifi.html'
     return render(request,template_name,context)
