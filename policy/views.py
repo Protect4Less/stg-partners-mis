@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from backend.classes.InitInfo import InitInfo
 from .helper import *
+import csv, io
 
 # Create your views here.
 
@@ -21,7 +22,7 @@ def initiate(request):
         template_name = 'policy/payment_link_generation.html'
         # context = {'retailer_summary':retailer_summary,'categories_dropdown':categories_dropdown}
         # context = {}
-        
+
         return render(request,template_name,context)
 
     # This is for intserting into PartnerOffline table
@@ -78,7 +79,7 @@ def get_model_ajax(request):
         model = helper_get_item(brand = brand, category_id = category_id )
         print('model:: ', model)
         error = error if error is not None else "No data found" if len(model) == 0 else None
-    
+
     if error is None:
         response_data = model
 
@@ -121,7 +122,7 @@ def get_plan_price_ajax(request):
     month_key = purchase_month
 
     item_price_data = helper_get_plan_price(month_key = month_key, price_slab = price_slab, category = category, plan_type = plan_type )
-    
+
     error = item_price_data['messageDesc'] if not item_price_data['status'] else None
 
     item_price = item_price_data['responseData']['price_data'] if error is None else {}
@@ -148,11 +149,11 @@ def listings(request):
 
     # try:
     #     # partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
-      
+
     # except Exception as e:
     #     partner_code = ""
     #     raise Exception("partner_code not found!")
-        
+
     if partner_code !="" and partner_code in ['1032']:
         template_name = 'policy/listings_partneroffline.html'
         partneroffline_data = helper_get_partneroffline_data(request,partner_code)
@@ -175,3 +176,51 @@ def cat_name_id_ajax(request):
         if len(category_data) > 0:
             category_data = category_data[0]
     return JsonResponse(category_data)
+
+@csrf_exempt
+def bulk_upload(request):
+
+    if len(request.FILES) > 0:
+
+        csv_file = request.FILES['fileToUpload']
+        file_data = csv_file.read().decode("utf-8")
+        lines = file_data.split("\n")
+        csvData = {}
+        cnt = 0
+        for line in lines:
+            if line != "":
+                if cnt != 0:
+
+                    fields = line.split(",")
+                    print("\n\n\nfields", fields)
+
+
+                    insertedid = None
+                    sku = fields[0]
+                    location = fields[1]
+                    device = fields[2]
+                    sub_device = fields[3]
+                    brand = fields[4]
+                    model = fields[5]
+                    device_name = fields[6]
+                    purchase_momnth = fields[7]
+                    policy_start_date = fields[8]
+                    ew_start_date = fields[9]
+                    first_name = fields[10]
+                    last_name = fields[11]
+                    email_id = fields[12]
+                    mobile_number = fields[13]
+                    imei_serial_no = fields[14]
+                    term_type = fields[15]
+
+                    inserted_id = PartnersDAO.insert_bsquaredwifi_offline_policy_data(data= {'bw_partner_code': '1040', 'bw_location':location,'bw_device': device, 'bw_sub_device':sub_device, 'bw_brand':brand, 'bw_model':model, 'bw_purchase_month':purchase_momnth, "bw_policy_start_date":policy_start_date, "bw_ew_start_date":ew_start_date, 'bw_first_name':first_name, 'bw_last_name':last_name, 'bw_email':email_id, 'bw_mobile_number':mobile_number, 'bw_imei_serial_no': imei_serial_no if imei_serial_no is not '' else '', 'bw_term_type':term_type,'bw_device_currency':"AED", 'bw_sku':sku })
+
+            cnt = cnt + 1
+
+    context = {}
+    partner_code = 1040
+    bsquaredwifi_data = helper_get_bsquaredwifi_data(request,partner_code)
+    print('bsquaredwifi_data==',bsquaredwifi_data)
+    context = {'bsquaredwifi_data':bsquaredwifi_data, 'partner_code':partner_code}
+    template_name = 'policy/bulk_upload_partneroffline.html'
+    return render(request,template_name,context)

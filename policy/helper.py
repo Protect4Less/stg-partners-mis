@@ -31,16 +31,16 @@ def helper_payment_link_generation(request):
 
         error = None
         error = 'Invalid category' if category is None else None
-        error = error if error is None else 'Invalid brand' if brand is None else None 
-        error = error if error is None else 'Invalid item' if item is None else None 
-        error = error if error is None else 'Invalid purchase_month' if purchase_month is None else None 
-        error = error if error is None else 'Invalid plan_type' if plan_type is None else None 
-        error = error if error is None else 'Invalid sales_person_id' if sales_person_id is None else None 
-        error = error if error is None else 'Invalid first_name' if first_name is None else None 
-        error = error if error is None else 'Invalid last_name' if last_name is None else None 
-        error = error if error is None else 'Invalid mobile_no' if mobile_no is None else None 
-        error = error if error is None else 'Invalid email_id' if email_id is None else None 
-        error = error if error is None else 'Invalid plan_id' if plan_id is None else None 
+        error = error if error is None else 'Invalid brand' if brand is None else None
+        error = error if error is None else 'Invalid item' if item is None else None
+        error = error if error is None else 'Invalid purchase_month' if purchase_month is None else None
+        error = error if error is None else 'Invalid plan_type' if plan_type is None else None
+        error = error if error is None else 'Invalid sales_person_id' if sales_person_id is None else None
+        error = error if error is None else 'Invalid first_name' if first_name is None else None
+        error = error if error is None else 'Invalid last_name' if last_name is None else None
+        error = error if error is None else 'Invalid mobile_no' if mobile_no is None else None
+        error = error if error is None else 'Invalid email_id' if email_id is None else None
+        error = error if error is None else 'Invalid plan_id' if plan_id is None else None
 
         slab_code = ''
 
@@ -49,7 +49,7 @@ def helper_payment_link_generation(request):
             slab_code = item_data[1]
             item_id = item_data[0]
             brand_data = brand.split(':')
-            brand_code = brand_data[0]  
+            brand_code = brand_data[0]
             brand_id = brand_data[1]
             term_type = 'PM' if plan_type == 'monthly' else 'PY' if plan_type == 'yearly' else ""
 
@@ -74,7 +74,7 @@ def helper_payment_link_generation(request):
             'pgpl_brand_code': brand_code,
             'pgpl_item_id': item_id,
             'pgpl_purchase_month': purchase_month,
-            'pgpl_first_name': first_name, 
+            'pgpl_first_name': first_name,
             'pgpl_last_name': last_name,
             'pgpl_email': email_id,
             'pgpl_mobile_number': mobile_no,
@@ -112,9 +112,9 @@ def helper_insert_into_partneroffline(request):
         print(":inserted_id:",inserted_id)
     except Exception as e:
         inserted_id = insertedid
-    
+
     return {'inserted_id': inserted_id}
-    
+
 
 def get_create_plan_data(prod_id = None, ctm_id = None, slab_codes = None):
         error = "prod_id is missing" if prod_id is None or prod_id == 0 else None
@@ -250,7 +250,7 @@ def helper_get_partneroffline_data(request,partner_code):
 
     if len(partners_offline_policy_data) > 0:
         popd_data = partners_offline_policy_data
-    return popd_data    
+    return popd_data
 
 def helper_get_category(partner_code):
     prod_id = Common.partner_dict[partner_code]['prod_id']
@@ -268,3 +268,15 @@ def helper_plan_type(partner_code):
     plan_type = partner_dict["plan_type"]
     print(":plan_type:",plan_type)
     return plan_type
+
+def helper_get_bsquaredwifi_data(request,partner_code):
+    # partner_code = request.session['partner_code'] if 'partner_code' in request.session else partner_code
+    init_info =  InitInfo.init(request)
+    partner_code = init_info['partner_code']
+    print(":partner_code:",partner_code)
+    popd_data = {}
+    bsquaredwifi_policy_data = PartnersDAO.get_bsquaredwifi_policy_data(column = "bw_id, bw_invoice_no, bw_sku, bw_device, bw_brand, bw_model, bw_purchase_month, bw_first_name, bw_last_name, bw_email, bw_mobile_number, bw_imei_serial_no, bw_term_type, bw_device_value, bw_device_currency, bw_s_id, bw_up_id, bw_tran_id, bw_policy_no, bw_comment, bw_status",condition={"bw_partner_code":partner_code},order_col='bw_addedon',order_by='DESC')
+
+    if len(bsquaredwifi_policy_data) > 0:
+        bw_data = bsquaredwifi_policy_data
+    return bw_data
