@@ -189,7 +189,7 @@ def bulk_upload(request):
             'plan_tax': "0.00",
             'plan_total_price': "4.69",
         },
-        'BDACEW000':{
+        'BDACEW001':{
             'plan_desc': "BBundle Accidental + Extended Warranty AED 750 - AED 1500",
             'plan_type': "PM",
             'plan_price': "9.39",
@@ -208,8 +208,6 @@ def bulk_upload(request):
             print("\n\n\n\n2222222")
 
         file_data = csv_file.read().decode("utf-8")
-
-
 
         lines = file_data.split("\n")
         csvData = {}
