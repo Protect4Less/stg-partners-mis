@@ -275,7 +275,7 @@ def bulk_upload(request):
                     plan_tax = sku_plan_type[sku]['plan_tax']
                     plan_total_price =  sku_plan_type[sku]['plan_total_price']
 
-                    inserted_id = PartnersDAO.insert_bsquaredwifi_offline_policy_data(data= {'bw_partner_code': '1040', 'bw_location':location,'bw_device': device, 'bw_sub_device':sub_device, 'bw_brand':brand, 'bw_model':model, 'bw_purchase_month':purchase_momnth, "bw_policy_start_date":policy_start_date, "bw_ew_start_date":ew_start_date, 'bw_first_name':first_name, 'bw_last_name':last_name, 'bw_email':email_id, 'bw_mobile_number':mobile_number, 'bw_imei_serial_no': imei_serial_no if imei_serial_no is not '' else '', 'bw_term_type':term_type,'bw_device_currency':"AED", 'bw_sku':sku, 'bw_plan_price':plan_price, 'bw_plan_tax':plan_tax, 'bw_plan_total_price':plan_total_price, 'bw_sku':sku , 'bw_plan_type' : plan_type })
+                    inserted_id = PartnersDAO.insert_bsquaredwifi_offline_policy_data(data= {'bw_partner_code': '1034', 'bw_location':location,'bw_device': device, 'bw_sub_device':sub_device, 'bw_brand':brand, 'bw_model':model, 'bw_purchase_month':purchase_momnth, "bw_policy_start_date":policy_start_date, "bw_ew_start_date":ew_start_date, 'bw_first_name':first_name, 'bw_last_name':last_name, 'bw_email':email_id, 'bw_mobile_number':mobile_number, 'bw_imei_serial_no': imei_serial_no if imei_serial_no is not '' else '', 'bw_term_type':term_type,'bw_device_currency':"AED", 'bw_sku':sku, 'bw_plan_price':plan_price, 'bw_plan_tax':plan_tax, 'bw_plan_total_price':plan_total_price, 'bw_sku':sku , 'bw_plan_type' : plan_type , "bw_device_name" : device_name  })
 
                     cnt_uploaded_data =  cnt_uploaded_data + 1
 
