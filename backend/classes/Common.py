@@ -21,11 +21,17 @@ class Common():
     # }
 
     # Staging
-    user_id_partner_code_dict = {
-        26:'1034',
+    # user_id_partner_code_dict = {
+    #     26:'1034',
+    #     27:'1032',
+    #     28:'1035',
+    #     29:'1034'
+    # }
+
+    user_id_partner_code_dict = {        
         27:'1032',
         28:'1035',
-        29:'1040'
+        29:'1034'
     }
 
     #Production
