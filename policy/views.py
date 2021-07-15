@@ -284,7 +284,7 @@ def bulk_upload(request):
         messages.success(request, str(cnt_uploaded_data)+ ' Data successfully uploaded')
 
     context = {}
-    partner_code = '1040'
+    partner_code = '1034'
     bsquaredwifi_data = helper_get_bsquaredwifi_data(request,partner_code)
     print('bsquaredwifi_data==',bsquaredwifi_data)
     context = {'bsquaredwifi_data':bsquaredwifi_data, 'partner_code':partner_code}
