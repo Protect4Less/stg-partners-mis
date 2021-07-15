@@ -235,7 +235,7 @@ def bulk_upload(request):
             return redirect('policy:bulk-upload')
             print("\n\n\n\n2222222")
 
-        file_data = csv_file.read().decode("utf-8")
+        file_data = csv_file.read().decode("utf-8" ,  errors='ignore')
 
         lines = file_data.split("\n")
         csvData = {}
@@ -252,6 +252,7 @@ def bulk_upload(request):
 
                     insertedid = None
                     sku = fields[0]
+
                     location = fields[1]
                     device = fields[2]
                     sub_device = fields[3]
@@ -268,14 +269,17 @@ def bulk_upload(request):
                     imei_serial_no = fields[14]
                     term_type = fields[15]
 
+                    if sku in sku_plan_type:
+                        plan_desc = sku_plan_type[sku]['plan_desc']
+                        plan_type = sku_plan_type[sku]['plan_type']
+                        plan_price = sku_plan_type[sku]['plan_price']
+                        plan_tax = sku_plan_type[sku]['plan_tax']
+                        plan_total_price =  sku_plan_type[sku]['plan_total_price']
 
-                    plan_desc = sku_plan_type[sku]['plan_desc']
-                    plan_type = sku_plan_type[sku]['plan_type']
-                    plan_price = sku_plan_type[sku]['plan_price']
-                    plan_tax = sku_plan_type[sku]['plan_tax']
-                    plan_total_price =  sku_plan_type[sku]['plan_total_price']
+                        inserted_id = PartnersDAO.insert_bsquaredwifi_offline_policy_data(data= {'bw_partner_code': '1034', 'bw_location':location,'bw_device': device, 'bw_sub_device':sub_device, 'bw_brand':brand, 'bw_model':model, 'bw_purchase_month':purchase_momnth, "bw_policy_start_date":policy_start_date, "bw_ew_start_date":ew_start_date, 'bw_first_name':first_name, 'bw_last_name':last_name, 'bw_email':email_id, 'bw_mobile_number':mobile_number, 'bw_imei_serial_no': imei_serial_no if imei_serial_no is not '' else '', 'bw_term_type':term_type,'bw_device_currency':"AED", 'bw_sku':sku, 'bw_plan_price':plan_price, 'bw_plan_tax':plan_tax, 'bw_plan_total_price':plan_total_price, 'bw_sku':sku , 'bw_plan_type' : plan_type , "bw_device_name" : device_name  })
+                    else:
+                        messages.error(request, sku+' SKU Not available')
 
-                    inserted_id = PartnersDAO.insert_bsquaredwifi_offline_policy_data(data= {'bw_partner_code': '1034', 'bw_location':location,'bw_device': device, 'bw_sub_device':sub_device, 'bw_brand':brand, 'bw_model':model, 'bw_purchase_month':purchase_momnth, "bw_policy_start_date":policy_start_date, "bw_ew_start_date":ew_start_date, 'bw_first_name':first_name, 'bw_last_name':last_name, 'bw_email':email_id, 'bw_mobile_number':mobile_number, 'bw_imei_serial_no': imei_serial_no if imei_serial_no is not '' else '', 'bw_term_type':term_type,'bw_device_currency':"AED", 'bw_sku':sku, 'bw_plan_price':plan_price, 'bw_plan_tax':plan_tax, 'bw_plan_total_price':plan_total_price, 'bw_sku':sku , 'bw_plan_type' : plan_type , "bw_device_name" : device_name  })
 
                     cnt_uploaded_data =  cnt_uploaded_data + 1
 
