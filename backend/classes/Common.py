@@ -31,7 +31,8 @@ class Common():
     user_id_partner_code_dict = {        
         27:'1032',
         28:'1035',
-        29:'1034'
+        29:'1034',
+        30:'1035'
     }
 
     #Production
