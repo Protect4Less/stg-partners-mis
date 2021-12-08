@@ -17,7 +17,7 @@ def initiate(request):
     # partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
     print(partner_code)
     # This is for generating Payment link
-    if partner_code in ['1034','1035','1036','1041']:
+    if partner_code in ['1034','1035','1036','1042']:
         context = helper_payment_link_generation(request)
         # print(payment_link)
         template_name = 'policy/payment_link_generation.html'
@@ -128,7 +128,7 @@ def get_plan_price_ajax(request):
     price_slab = helper_get_devicevalue(item_data_arr[3])
     month_key = purchase_month
     
-    if partner_code == "1041":
+    if partner_code == "1042":
         # This is Specific only for QUIX partner
         # QUIX will only sell Mobile Phone
         item_price_data = helper_quix_standard_plan_price(month_key = month_key, plan_type = plan_type, price_slab = price_slab )
