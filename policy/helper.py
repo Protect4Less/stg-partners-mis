@@ -57,7 +57,7 @@ def helper_payment_link_generation(request):
         if error is None:
 
             #QUIX Partner condition
-            if partner_code == '1041':
+            if partner_code == '1042':
                 device_value = helper_get_devicevalue(device_cost)
                 price_data = helper_quix_standard_plan_price(purchase_month, plan_type,device_value)
                 plan_id = 10001 # Remove this code once the AED price are inserted inside the DB
