@@ -20,7 +20,7 @@ class Common():
     #     8:'1032'
     # }
 
-    Staging
+    #Staging
     user_id_partner_code_dict = {
         26:'1042',
         27:'1032',
