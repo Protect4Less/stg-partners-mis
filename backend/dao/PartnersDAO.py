@@ -94,7 +94,6 @@ class PartnersDAO(object):
         ]
 
     def insert_bsquaredwifi_offline_policy_data(data):
-        print('insert_bsquaredwifi_offline_policy_data:: ', data)
         inserted_id = ""
         columns_s_value = []
         cursor = connection.cursor()

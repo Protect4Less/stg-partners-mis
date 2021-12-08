@@ -17,7 +17,7 @@ def initiate(request):
     # partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
     print(partner_code)
     # This is for generating Payment link
-    if partner_code in ['1034','1035','1036']:
+    if partner_code in ['1034','1035','1036','1041']:
         context = helper_payment_link_generation(request)
         # print(payment_link)
         template_name = 'policy/payment_link_generation.html'
@@ -40,8 +40,8 @@ def initiate(request):
         context = {"category_dropdown":category_dropdown, "plan_type_dropdown":plan_type_dropdown, 'partner_code':partner_code}
         return render(request,template_name,context)
 
-    exit()
-    # return redirect('dashboard:logout')
+    # exit()
+    return redirect('dashboard:dashboard')
 
 @csrf_exempt
 def get_brand_model_ajax(request):
@@ -57,7 +57,6 @@ def get_brand_model_ajax(request):
     if error is None:
     #cat_id = str(cat_id)
         make_item_info = helper_get_brand_model(category_id = cat_id, ctm_id = ctm_id, slab_codes = slab_codes)
-
     # print(make_item_info)
     return JsonResponse(make_item_info)
 
@@ -97,19 +96,26 @@ def get_model_ajax(request):
 
 @csrf_exempt
 def get_plan_price_ajax(request):
+
+    init_info =  InitInfo.init(request)
+    partner_code = init_info['partner_code']
+
     error = None
     item_data = request.POST.get('item_data',None)
     plan_type = request.POST.get('plan_type',None)
     category = request.POST.get('category',None)
     purchase_month = request.POST.get('purchase_month',None)
+    device_value = request.POST.get('device_value',None)
 
     error = 'Invalid Request Type' if not request.POST else None
     error = error if error else 'Request is not Ajax Type' if not request.is_ajax else None
 
     print('item_data::', item_data)
-    print('purchase_month::', plan_type)
-    print('purchase_month::', category)
+    print('plan_type::', plan_type)
+    print('category::', category)
     print('purchase_month::', purchase_month)
+    print('device_value::', device_value)
+
 
     item_price = 0.00
     error = 'Invalid Item' if item_data is None else None
@@ -119,10 +125,18 @@ def get_plan_price_ajax(request):
 
     item_data_arr = item_data.split(':')
 
-    price_slab = item_data_arr[1]
+    price_slab = helper_get_devicevalue(item_data_arr[3])
     month_key = purchase_month
+    
+    if partner_code == "1041":
+        # This is Specific only for QUIX partner
+        # QUIX will only sell Mobile Phone
+        item_price_data = helper_quix_standard_plan_price(month_key = month_key, plan_type = plan_type, price_slab = price_slab )
+    else:
+         #This is the default pricing we get getting
+        item_price_data = helper_get_plan_price(month_key = month_key, price_slab = price_slab, category = category, plan_type = plan_type )
 
-    item_price_data = helper_get_plan_price(month_key = month_key, price_slab = price_slab, category = category, plan_type = plan_type )
+    print('item_price_data:: ', item_price_data)
 
     error = item_price_data['messageDesc'] if not item_price_data['status'] else None
 
@@ -276,7 +290,9 @@ def bulk_upload(request):
                         plan_tax = sku_plan_type[sku]['plan_tax']
                         plan_total_price =  sku_plan_type[sku]['plan_total_price']
 
-                        inserted_id = PartnersDAO.insert_bsquaredwifi_offline_policy_data(data= {'bw_partner_code': '1034', 'bw_location':location,'bw_device': device, 'bw_sub_device':sub_device, 'bw_brand':brand, 'bw_model':model, 'bw_purchase_month':purchase_momnth, "bw_policy_start_date":policy_start_date, "bw_ew_start_date":ew_start_date, 'bw_first_name':first_name, 'bw_last_name':last_name, 'bw_email':email_id, 'bw_mobile_number':mobile_number, 'bw_imei_serial_no': imei_serial_no if imei_serial_no is not '' else '', 'bw_term_type':term_type,'bw_device_currency':"AED", 'bw_sku':sku, 'bw_plan_price':plan_price, 'bw_plan_tax':plan_tax, 'bw_plan_total_price':plan_total_price, 'bw_sku':sku , 'bw_plan_type' : plan_type , "bw_device_name" : device_name  })
+                        data= {'bw_partner_code': '1034', 'bw_location':location,'bw_device': device, 'bw_sub_device':sub_device, 'bw_brand':brand, 'bw_model':model, 'bw_purchase_month':purchase_momnth, "bw_policy_start_date":policy_start_date, "bw_ew_start_date":ew_start_date, 'bw_first_name':first_name, 'bw_last_name':last_name, 'bw_email':email_id, 'bw_mobile_number':mobile_number, 'bw_imei_serial_no': imei_serial_no if imei_serial_no is not '' else '', 'bw_term_type':term_type,'bw_device_currency':"AED", 'bw_sku':sku, 'bw_plan_price':plan_price, 'bw_plan_tax':plan_tax, 'bw_plan_total_price':plan_total_price, 'bw_sku':sku , 'bw_plan_type' : plan_type , "bw_device_name" : device_name  }
+
+                        inserted_id = PartnersDAO.insert_bsquaredwifi_offline_policy_data(data)
                     else:
                         messages.error(request, sku+' SKU Not available')
 

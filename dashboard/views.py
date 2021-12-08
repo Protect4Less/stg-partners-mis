@@ -15,9 +15,6 @@ def dashboard(request):
 	init_info =  InitInfo.init(request)
 	partner_code = init_info['partner_code']
 
-
-	print("\n\n\ninit_info", init_info)
-
 	if request.method == 'POST':
 		start_date = request.POST.get("startDate",'')
 		end_date = request.POST.get("endDate",'')

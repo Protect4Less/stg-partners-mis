@@ -20,21 +20,21 @@ class Common():
     #     8:'1032'
     # }
 
-    # Staging
-    # user_id_partner_code_dict = {
-    #     26:'1034',
-    #     27:'1032',
-    #     28:'1035',
-    #     29:'1034'
-    # }
-
-    user_id_partner_code_dict = {        
+    Staging
+    user_id_partner_code_dict = {
+        26:'1042',
         27:'1032',
         28:'1035',
-        29:'1034',
-        30:'1035',
-        26:'1036'
+        29:'1034'
     }
+
+    # user_id_partner_code_dict = {        
+    #     27:'1032',
+    #     28:'1035',
+    #     29:'1034',
+    #     30:'1035',
+    #     26:'1042'
+    # }
 
     #Production
     # user_id_partner_code_dict = {

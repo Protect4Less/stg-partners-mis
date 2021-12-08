@@ -27,7 +27,7 @@ def helper_payment_link_generation(request):
         mobile_no = request.POST.get('mobile_no', None)
         email_id = request.POST.get('email_id', None)
         plan_id = request.POST.get('plan_id', None)
-
+        # device_value = request.POST.get('device_value', None)
 
         error = None
         error = 'Invalid category' if category is None else None
@@ -42,24 +42,42 @@ def helper_payment_link_generation(request):
         error = error if error is None else 'Invalid email_id' if email_id is None else None
         error = error if error is None else 'Invalid plan_id' if plan_id is None else None
 
-        slab_code = ''
+        slab_code, device_cost = '',''
 
         if error is None:
             item_data = item.split(':')
             slab_code = item_data[1]
             item_id = item_data[0]
+            device_cost = item_data[3]
             brand_data = brand.split(':')
             brand_code = brand_data[0]
             brand_id = brand_data[1]
             term_type = 'PM' if plan_type == 'monthly' else 'PY' if plan_type == 'yearly' else ""
 
         if error is None:
-            if purchase_month == '0_12':
-                price_data = MasterDAO.get_plan(plan_id = plan_id)
-                price_data = price_data[0] if len(price_data) > 0 else {}
+
+            #QUIX Partner condition
+            if partner_code == '1041':
+                device_value = helper_get_devicevalue(device_cost)
+                price_data = helper_quix_standard_plan_price(purchase_month, plan_type,device_value)
+                plan_id = 10001 # Remove this code once the AED price are inserted inside the DB
+                price_data = price_data['responseData']['price_data']
+                slab_code = device_value
+
+                '''
+                Quix sells only Yearly plans. Standard Plan is PY plan type code. Extended Warranty is PEW12M
+                '''
+                term_type = price_data['plan_type_code']
             else:
-                ew_price_data = ew_price_config(prod_id = 1)
-                price_data = ew_price_data[plan_type]
+                if purchase_month == '0_12':
+                    price_data = MasterDAO.get_plan(plan_id = plan_id)
+                    price_data = price_data[0] if len(price_data) > 0 else {}
+                else:
+                    ew_price_data = ew_price_config(prod_id = 1)
+                    price_data = ew_price_data[plan_type]
+
+        
+        print('price_data:: ', price_data)
 
         input_data = {
             'pgpl_partner_code': partner_code,
@@ -79,6 +97,8 @@ def helper_payment_link_generation(request):
             'pgpl_email': email_id,
             'pgpl_mobile_number': mobile_no,
             'pgpl_term_type': term_type,
+            'pgpl_plan_type': price_data['plan_type'],
+            'pgpl_plan_title': price_data['plan_title'],
             'pgpl_salesperson_id': sales_person_id
         }
 
@@ -282,3 +302,131 @@ def helper_get_bsquaredwifi_data(request,partner_code):
         return bw_data
     else:
         return "{}"
+
+def helper_quix_standard_plan_price(month_key, plan_type,price_slab):
+    print('month_key:: ',month_key)
+    print('plan_type:: ',plan_type)
+    print('device_value:: ',price_slab)
+    error = None
+    status = False 
+    price_data = {}
+    quix_plan_config = {
+        'standard_plan':{
+            '0_12':{
+                'below_1000':{
+                    'yearly':{'plan_type': 'yearly', 'plan_title': 'Yearly', 'plan_type_code': 'PY' ,'plan_discount': 0 ,'plan_price':125, 'plan_actual_price':125, 'plan_unit':'AED', 'plan_tax':6.25, 'plan_total_price':131.25, }
+                },
+                'between_1000_2000':{
+                    'yearly':{'plan_type': 'yearly', 'plan_title': 'Yearly', 'plan_type_code': 'PY' ,'plan_discount': 0 ,'plan_price':250, 'plan_actual_price':250, 'plan_unit':'AED', 'plan_tax':12.50, 'plan_total_price':262.50, }
+                },
+                'between_2000_3000':{
+                    'yearly':{'plan_type': 'yearly', 'plan_title': 'Yearly', 'plan_type_code': 'PY' ,'plan_discount': 0 ,'plan_price':374, 'plan_actual_price':374, 'plan_unit':'AED', 'plan_tax':18.70, 'plan_total_price':392.70, }
+                },
+                'between_3000_4000':{
+                    'yearly':{'plan_type': 'yearly', 'plan_title': 'Yearly', 'plan_type_code': 'PY' ,'plan_discount': 0 ,'plan_price':499, 'plan_actual_price':499, 'plan_unit':'AED', 'plan_tax':24.95, 'plan_total_price':523.95,}
+                },
+                'between_4000_5000':{
+                    'yearly':{'plan_type': 'yearly', 'plan_title': 'Yearly', 'plan_type_code': 'PY' ,'plan_discount': 0 ,'plan_price':624, 'plan_actual_price':624, 'plan_unit':'AED', 'plan_tax':31.20, 'plan_total_price':655.20, }
+                },
+                'above_5000':{
+                    'yearly':{'plan_type': 'yearly', 'plan_title': 'Yearly', 'plan_type_code': 'PY' ,'plan_discount': 0 ,'plan_price':936, 'plan_actual_price':936, 'plan_unit':'AED', 'plan_tax':46.80, 'plan_total_price':982.80, }
+                }
+            },
+            '12_24':{
+                'below_1000':{
+                    'yearly':{'plan_type': 'yearly', 'plan_title': 'Yearly', 'plan_type_code': 'PY' ,'plan_discount': 0 ,'plan_price':125, 'plan_actual_price':125, 'plan_unit':'AED', 'plan_tax':6.25, 'plan_total_price':131.25, }
+                },
+                'between_1000_2000':{
+                    'yearly':{'plan_type': 'yearly', 'plan_title': 'Yearly', 'plan_type_code': 'PY' ,'plan_discount': 0 ,'plan_price':250, 'plan_actual_price':250, 'plan_unit':'AED', 'plan_tax':12.50, 'plan_total_price':262.50, }
+                },
+                'between_2000_3000':{
+                    'yearly':{'plan_type': 'yearly', 'plan_title': 'Yearly', 'plan_type_code': 'PY' ,'plan_discount': 0 ,'plan_price':374, 'plan_actual_price':374, 'plan_unit':'AED', 'plan_tax':18.70, 'plan_total_price':392.70, }
+                },
+                'between_3000_4000':{
+                    'yearly':{'plan_type': 'yearly', 'plan_title': 'Yearly', 'plan_type_code': 'PY' ,'plan_discount': 0 ,'plan_price':499, 'plan_actual_price':499, 'plan_unit':'AED', 'plan_tax':24.95, 'plan_total_price':523.95,}
+                },
+                'between_4000_5000':{
+                    'yearly':{'plan_type': 'yearly', 'plan_title': 'Yearly', 'plan_type_code': 'PY' ,'plan_discount': 0 ,'plan_price':624, 'plan_actual_price':624, 'plan_unit':'AED', 'plan_tax':31.20, 'plan_total_price':655.20, }
+                },
+                'above_5000':{
+                    'yearly':{'plan_type': 'yearly', 'plan_title': 'Yearly', 'plan_type_code': 'PY' ,'plan_discount': 0 ,'plan_price':936, 'plan_actual_price':936, 'plan_unit':'AED', 'plan_tax':46.80, 'plan_total_price':982.80, }
+                }
+            }
+        },
+        'ew_only':{
+            '0_12':{
+                'below_1000':{
+                    'yearly':{'plan_type': '12 months EW', 'plan_title': '12 months EW', 'plan_type_code': 'PEW12M' ,'plan_discount': 30 ,'plan_price':81.90, 'plan_actual_price':117, 'plan_unit':'AED', 'plan_tax':4.10, 'plan_total_price':86, }
+                },
+                'between_1000_2000':{
+                    'yearly':{'plan_type': '12 months EW', 'plan_title': '12 months EW', 'plan_type_code': 'PEW12M' ,'plan_discount': 30 ,'plan_price':113.75, 'plan_actual_price':162.5, 'plan_unit':'AED', 'plan_tax':5.69, 'plan_total_price':119.44, }
+                },
+                'between_2000_3000':{
+                    'yearly':{'plan_type': '12 months EW', 'plan_title': '12 months EW', 'plan_type_code': 'PEW12M' ,'plan_discount': 30 ,'plan_price':159.25, 'plan_actual_price':227.5, 'plan_unit':'AED', 'plan_tax':7.96, 'plan_total_price':167.21, }
+                },
+                'between_3000_4000':{
+                    'yearly':{'plan_type': '12 months EW', 'plan_title': '12 months EW', 'plan_type_code': 'PEW12M' ,'plan_discount': 30 ,'plan_price':182, 'plan_actual_price':260, 'plan_unit':'AED', 'plan_tax':9.10, 'plan_total_price':191.10, }
+                },
+                'between_4000_5000':{
+                    'yearly':{'plan_type': '12 months EW', 'plan_title': '12 months EW', 'plan_type_code': 'PEW12M' ,'plan_discount': 30 ,'plan_price':227.50, 'plan_actual_price':325.0, 'plan_unit':'AED', 'plan_tax':11.38, 'plan_total_price':238.88, }
+                },
+                'above_5000':{
+                    'yearly':{'plan_type': '12 months EW', 'plan_title': '12 months EW', 'plan_type_code': 'PEW12M' ,'plan_discount': 30 ,'plan_price':318.50, 'plan_actual_price':455, 'plan_unit':'AED', 'plan_tax':15.93, 'plan_total_price':334.43, }
+                },
+            },
+            '12_24':{
+                'below_1000':{
+                    'yearly':{'plan_type': '12 months EW', 'plan_title': '12 months EW', 'plan_type_code': 'PEW12M' ,'plan_discount': 30 ,'plan_price':81.90, 'plan_actual_price':117, 'plan_unit':'AED', 'plan_tax':4.10, 'plan_total_price':86, }
+                },
+                'between_1000_2000':{
+                    'yearly':{'plan_type': '12 months EW', 'plan_title': '12 months EW', 'plan_type_code': 'PEW12M' ,'plan_discount': 30 ,'plan_price':81.90, 'plan_actual_price':117, 'plan_unit':'AED', 'plan_tax':4.10, 'plan_total_price':86, }
+                },
+                'between_2000_3000':{
+                    'yearly':{'plan_type': '12 months EW', 'plan_title': '12 months EW', 'plan_type_code': 'PEW12M' ,'plan_discount': 30 ,'plan_price':81.90, 'plan_actual_price':117, 'plan_unit':'AED', 'plan_tax':4.10, 'plan_total_price':86, }
+                },
+                'between_3000_4000':{
+                    'yearly':{'plan_type': '12 months EW', 'plan_title': '12 months EW', 'plan_type_code': 'PEW12M' ,'plan_discount': 30 ,'plan_price':91, 'plan_actual_price':130, 'plan_unit':'AED', 'plan_tax':4.55, 'plan_total_price':95.55, }
+                },
+                'between_4000_5000':{
+                    'yearly':{'plan_type': '12 months EW', 'plan_title': '12 months EW', 'plan_type_code': 'PEW12M' ,'plan_discount': 30 ,'plan_price':113.75, 'plan_actual_price':162.5, 'plan_unit':'AED', 'plan_tax':5.69, 'plan_total_price':119.44, }
+                },
+                'above_5000':{
+                    'yearly':{'plan_type': '12 months EW', 'plan_title': '12 months EW', 'plan_type_code': 'PEW12M' ,'plan_discount': 30 ,'plan_price':159.25, 'plan_actual_price':227.5, 'plan_unit':'AED', 'plan_tax':7.96, 'plan_total_price':167.21, }
+                },
+            }
+        }    
+    }
+
+    try:
+        price_data = quix_plan_config[plan_type][month_key][price_slab]['yearly']
+        status = True
+    except Exception as e:
+        error = e
+        status = False
+
+    response = {
+        "status": ("OK" if status else "NOK"),
+        "code": ("200" if status else "201"),
+        "message": 'Oops ! Some error occured while processing request. Please contact Protect4Less Technical Team.',
+        "messageDesc": error,
+        "responseData":{'price_data':price_data}
+    }
+
+    return response
+
+def helper_get_devicevalue(device_cost):
+    device_cost = float(device_cost)
+    print('device_cost:: ',device_cost)
+    if device_cost < 1000:
+        return 'below_1000'
+    elif device_cost >= 1000 and device_cost < 2000:
+        return 'between_1000_2000'
+    elif device_cost >= 2000 and device_cost < 3000:
+        return 'between_2000_3000'
+    elif device_cost >= 3000 and device_cost < 4000:
+        return 'between_3000_4000'
+    elif device_cost >= 4000 and device_cost < 5000:
+        return 'between_4000_5000'
+    elif device_cost >= 5000:
+        return 'above_5000'
+    return True

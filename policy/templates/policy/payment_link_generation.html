@@ -83,7 +83,9 @@
                             <div class="col-md-9 col-sm-9 col-xs-12">
                                 <select class="form-control selectpicker" name="category" id="category" data-container="body" data-live-search="true" title="Select a Device" data-hide-disabled="true">
                                     {% for k,v in category_info.items %}
-                                    <option value="{{v.cat_id}}">{{v.cat_name}}</option>
+                                      {% if v.cat_name == 'Mobile Phone' %}
+                                        <option value="{{v.cat_id}}">{{v.cat_name}}</option>
+                                      {% endif %}
                                     {% endfor %}
                             </select>
                             </div>
@@ -106,6 +108,21 @@
                             </div>
                         </div>
 
+                        <!-- <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Device Value<span class="required">*</span></label>
+                          <div class="col-md-9 col-sm-9 col-xs-12">
+                              <select class="form-control selectpicker" name="device_value" id="device_value" data-container="body" data-live-search="true" title="Select Device Value" data-hide-disabled="true">
+                                <option value="below_1000">Below AED 1000</option>
+                                    <option value="between_1000_2000">Between AED 1000-2000</option>
+                                    <option value="between_2000_3000">Between AED 2000-3000</option>
+                                    <option value="between_3000_4000">Between AED 3000-4000</option>
+                                    <option value="between_4000_5000">Between AED 4000-5000</option>
+                                    <option value="above_5000">Above AED 5000</option>
+                              </select>
+                          </div>
+                        </div> -->
+                        <input type="hidden" value="" name="device_value" id="device_value">
+
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Purchase Month<span class="required">*</span></label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
@@ -120,8 +137,8 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Plan Type<span class="required">*</span></label>
                             <div class="col-md-9 col-sm-9 col-xs-12">
                                 <select class="form-control selectpicker" name="plan_type" id="plan_type" data-container="body" data-live-search="true" title="Select Plan Type" data-hide-disabled="true">
-                                    <option value="monthly">Monthly</option>
-                                    <option value="yearly">Yearly</option>
+                                    <option value="standard_plan">Standard P4l Plan</option>
+                                    <option value="ew_only">Extended Warranty Only</option>
                                 </select>
                             </div>
                         </div>
@@ -350,25 +367,30 @@ $("#brand").change(function () {
         
 }).change();
 
+
+$("#item").change(function () {
+  $("#plan_type").val('');
+  $("#purchase_month").val('');
+
+    $('.selectpicker').selectpicker('refresh');
+}).change()
+  
+
 $("#plan_type").change(function () {
     $('.selectpicker').selectpicker('refresh');
     let plan_type = $(this).val();
     console.log(plan_type);
 
     if(plan_type == '0'){return false; }
-
     let category = $('#category').val();
     let item_data = $('#item').val();
     let purchase_month = $('#purchase_month').val();
-    // item_str = item_str.split(':');
-    // console.log(item_str);
-    
-    // console.log(brand_arr);    
+    let device_value = $('#device_value').val();  
     
     $.ajax({
             type:"POST",
             url: "{% url 'policy:get-plan-price' %}",
-            data:  {'item_data': item_data, 'plan_type':plan_type, 'category':category, 'purchase_month':purchase_month},
+            data:  {'item_data': item_data, 'plan_type':plan_type, 'category':category, 'purchase_month':purchase_month, 'device_value':device_value},
             dataType: 'json',
             async: false,
             beforeSend: function(){
