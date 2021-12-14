@@ -147,25 +147,23 @@
                         <div class="col-md-4 col-sm-12 col-xs-12 form-group"></div>
                         <div class="col-md-4 col-sm-12 col-xs-12 form-group">
                             <h3 class="title-plan-feature hide">Plan Features</h3>
-                            <ul class="list-unstyled project_files features-0-12 hide">
+                            <ul class="list-unstyled plan_features project_files standard_plan hide">
                                 <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i> All Accidental & Mechanical Failures</a>
                                 </li>
                                 <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>Theft by Forced Entry</a>
                                 </li>
-                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i> Repair or Replacement Guaranteed</a>
+                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>Repair or Replacement Guaranteed</a>
                                 </li>
-                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>1 Claim/Year (Monthly Plan) & 2 Claims/Year (Yearly Plan)</a>
+                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>2 Claims/Year</a>
                                 </li>
-                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>FREE Pickup & Drop off (on Yearly Plan)</a>
+                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>FREE Pickup & Drop off</a>
                                 </li>
                             </ul>
-                            <ul class="list-unstyled project_files features-12-24 hide">
-                                <li><a href="javascript:void(0);"><i class="fa fa-close"></i>All Accidental Damage</a></li>
-                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>All Mechanical Failures</a></li>
-                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>Theft by Forced Entry</a></li>
+                            <ul class="list-unstyled plan_features project_files ew_only hide">
+                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>All Electrical and Mechanical Breakdowns</a></li>
                                 <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>Repair or Replacement Guaranteed</a></li>
-                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>Unlimited Claims</a></li>
-                                <li><a href="javascript:void(0);"><i class="fa fa-close"></i>FREE Pickup & Drop off (on Yearly Plan)</a></li>
+                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>Unlimited Claims during Plan period</a></li>
+                                <li><a href="javascript:void(0);"><i class="fa fa-check-circle"></i>Free pick up and drop off</a></li>
                             </ul>
                         </div>
 
@@ -387,6 +385,25 @@ $("#plan_type").change(function () {
     let purchase_month = $('#purchase_month').val();
     let device_value = $('#device_value').val();  
     
+
+    //$("#plan_type").val('default').selectpicker("refresh");
+    //let purchase_month = $(this).val();
+    $('.title-plan-feature').addClass('hide');
+    $('.plan_features').addClass('hide');
+    //$('.features-12-24').addClass('hide');
+    
+    if(plan_type == 'standard_plan'){
+        $('.title-plan-feature').removeClass('hide');
+        $('.standard_plan').removeClass('hide');
+        $('.ew_only').addClass('hide');
+    }
+    if(plan_type == 'ew_only'){
+        $('.title-plan-feature').removeClass('hide');
+        $('.standard_plan').addClass('hide');
+        $('.ew_only').removeClass('hide');
+    }
+
+
     $.ajax({
             type:"POST",
             url: "{% url 'policy:get-plan-price' %}",
@@ -402,13 +419,7 @@ $("#plan_type").change(function () {
                 console.log(response);
                 item_data = response.responseData
                 $('#plan-rice').html('AED '+item_data.item_price.plan_total_price);
-                $('#plan_id').val(item_data.item_price.plan_id);
-
-
-                // Object.keys(item_data).forEach(function (item) {
-                //   $('#model').append($('<option>',{value: item_data[item].item_id+':'+item_data[item].item_price_slab+':'+item_data[item].item_name+':'+item_data[item].item_base_value, text : item_data[item].item_name}));
-                // });
-               
+                $('#plan_id').val(item_data.item_price.plan_id);       
                 $('.selectpicker').selectpicker('refresh');
             },
             complete:function(data){
