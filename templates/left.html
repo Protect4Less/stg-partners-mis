@@ -22,7 +22,10 @@
 			<!-- <h3>General</h3> -->
 			<ul class="nav side-menu">
 				<li>
+					<!-- This check is for Quix Partner - Promoter user. This type of user cannot see the Detailed Report -->
+					{% if request.user.id != 36 %}
 					<a href="{% url 'sales:statistics' %}"><i class="fa fa-bar-chart"></i> Detailed Report</a>
+					{% endif %}
 					<!-- <ul class="nav child_menu">
 						<li><a href="{% url 'sales:statistics' %}">Statistics</a></li>
 					</ul> -->

@@ -25,7 +25,12 @@ class Common():
         26:'1042',
         27:'1032',
         28:'1035',
-        29:'1034'
+        29:'1034',
+        36:'1042'
+    }
+
+    master_user_partner_code_dict = {
+        36:'1042'
     }
 
     # user_id_partner_code_dict = {        

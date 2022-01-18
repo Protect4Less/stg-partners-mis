@@ -15,6 +15,11 @@ def dashboard(request):
 	init_info =  InitInfo.init(request)
 	partner_code = init_info['partner_code']
 
+	#Quix Promoter USer redirect to Payment Link Generation Page
+	print(request.user.id)
+	if request.user.id == 36:
+		return redirect('policy:initiate')
+
 	if request.method == 'POST':
 		start_date = request.POST.get("startDate",'')
 		end_date = request.POST.get("endDate",'')

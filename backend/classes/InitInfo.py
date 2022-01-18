@@ -14,5 +14,6 @@ class InitInfo():
 		print('partner_code:: ', partner_code)
 		
 		return {
-			'partner_code': partner_code
+			'partner_code': partner_code,
+			'user_id': user_id
 		}
