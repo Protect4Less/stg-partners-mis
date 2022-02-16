@@ -1,5 +1,6 @@
 from backend.dao.MasterDAO import MasterDAO
 from backend.dao.PolicyDAO import PolicyDAO
+from backend.dao.EmailDAO import EmailDAO
 from backend.dao.PartnersDAO import *
 from backend.classes.Common import *
 from backend.classes.InitInfo import InitInfo
@@ -28,6 +29,12 @@ def helper_payment_link_generation(request):
         email_id = request.POST.get('email_id', None)
         plan_id = request.POST.get('plan_id', None)
         # device_value = request.POST.get('device_value', None)
+        
+        
+        #stg Domain
+        et_domain = "https://devae.protect4less.com"
+        #Prod Domain
+        # et_domain = "https://protect4less.ae"
 
         error = None
         error = 'Invalid category' if category is None else None
@@ -103,6 +110,10 @@ def helper_payment_link_generation(request):
         }
 
         inserted_id = PolicyDAO.insert_partners_generate_payement_link(input_data)
+
+        #Send EMail to the Customer of the Payment Link
+        EmailDAO.insert_email_tran(data = {"et_type":"customer_send_payment_link", "et_email_id":email_id, "et_subject":"Complete Your P4L Policy Purchase & Get Your Protection Plan", "et_tl_id": inserted_id, "et_domain":et_domain, "et_status":"pending"})
+
 
     category_info = get_create_plan_data(prod_id = 1)
     print('category_info:: ',category_info)
