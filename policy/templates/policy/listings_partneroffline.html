@@ -31,6 +31,7 @@
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Email ID</th>
+                            <th>Error Message</th>
                             <th>Status</th>
                             </tr>
                         </thead>
@@ -46,7 +47,8 @@
                                     <td>{{ data.popd_purchase_month }}</td>
                                     <td>{{ data.popd_first_name }}</td>
                                     <td>{{ data.popd_last_name }}</td>
-                                    <td>{{ data.popd_email }}</td>                                    
+                                    <td>{{ data.popd_email }}</td>   
+                                    <th>{{ data.popd_comment }}</th>                                  
                                     <td>{{ data.popd_status }}</td>
                                 </tr>
                                 {% endfor %}

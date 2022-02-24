@@ -169,7 +169,7 @@ def listings(request):
     #     partner_code = ""
     #     raise Exception("partner_code not found!")
 
-    if partner_code !="" and partner_code in ['1032']:
+    if partner_code !="" and partner_code in ['1032','1044']:
         template_name = 'policy/listings_partneroffline.html'
         partneroffline_data = helper_get_partneroffline_data(request,partner_code)
         print('partneroffline_data==',partneroffline_data)

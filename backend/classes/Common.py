@@ -15,22 +15,24 @@ class Common():
     }
 
     #Local -> userid : partner_code
-    # user_id_partner_code_dict = {
-    #     7:'1034',
-    #     8:'1032'
-    # }
-
-    #Staging
     user_id_partner_code_dict = {
-        26:'1042',
-        27:'1032',
-        28:'1035',
-        29:'1034',
-        36:'1042'
+        7:'1034',
+        8:'1032',
+        36:'1044'
+
     }
 
+    #Staging
+    # user_id_partner_code_dict = {
+    #     26:'1042',
+    #     27:'1032',
+    #     28:'1035',
+    #     29:'1034',
+    #     35:'1042'
+    # }
+
     master_user_partner_code_dict = {
-        36:'1042'
+        35:'1042'
     }
 
     # user_id_partner_code_dict = {        
