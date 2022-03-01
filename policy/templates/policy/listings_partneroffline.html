@@ -22,6 +22,7 @@
                         <table id="datatable" class="table table-striped table-bordered">
                         <thead>
                             <tr>
+                            <th>Transaction Id</th>
                             <th>Invoice Number</th>
                             <th>Device</th>
                             <th>Sub Device</th>
@@ -39,6 +40,7 @@
                             {% if partneroffline_data|length > 0 %}
                                 {% for data in partneroffline_data %}
                                 <tr>
+                                    <td>{{ data.popd_id }}</td>
                                     <td>{{ data.popd_invoice_no }}</td>
                                     <td>{{ data.popd_device }}</td>
                                     <td>{{ data.popd_sub_device }}</td>
