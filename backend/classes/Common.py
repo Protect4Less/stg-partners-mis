@@ -47,3 +47,9 @@ class Common():
     # user_id_partner_code_dict = {
 
     # }
+
+    payment_link_generation_partners = ['1042']
+    
+    host_url = 'http://127.0.0.1:8000'
+    # host_url = 'https://devae.protect4less.com'
+    # host_url = 'https://protect4less.ae'

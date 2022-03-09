@@ -160,7 +160,10 @@ def listings(request):
     #print("sess==",request.session['partner_code'])
     #print(type(request.session['partner_code']))
     init_info =  InitInfo.init(request)
+
+    print('init_info:: ', init_info)
     partner_code = init_info['partner_code']
+    is_payment_link_generation_partner = init_info['is_payment_link_generation_partner']
 
     # try:
     #     # partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
@@ -169,7 +172,17 @@ def listings(request):
     #     partner_code = ""
     #     raise Exception("partner_code not found!")
 
-    if partner_code !="" and partner_code in ['1032','1044']:
+    # if partner_code !="" and partner_code in ['1032','1044']:
+
+    #This code is for Payment Link Generation Partner
+    if is_payment_link_generation_partner:
+        template_name = 'policy/listing_partners_generate_payement_link.html'
+        payement_link_data = helper_get_partners_generate_payement_link_data(request,partner_code)
+        print('payement_link_data==',payement_link_data)
+        context = {'payement_link_data':payement_link_data, 'partner_code':partner_code, 'host_url': init_info['host_url'] }
+        return render(request,template_name,context)
+
+    if partner_code !="" and is_payment_link_generation_partner is False:
         template_name = 'policy/listings_partneroffline.html'
         partneroffline_data = helper_get_partneroffline_data(request,partner_code)
         print('partneroffline_data==',partneroffline_data)

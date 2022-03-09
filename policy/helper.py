@@ -12,7 +12,7 @@ def helper_payment_link_generation(request):
     inserted_id = 0
 
     init_info =  InitInfo.init(request)
-
+    host_url = init_info['host_url']
     partner_code = init_info['partner_code']
 
     if request.method == 'POST':
@@ -55,6 +55,7 @@ def helper_payment_link_generation(request):
             item_data = item.split(':')
             slab_code = item_data[1]
             item_id = item_data[0]
+            item_name = item_data[2]
             device_cost = item_data[3]
             brand_data = brand.split(':')
             brand_code = brand_data[0]
@@ -98,6 +99,7 @@ def helper_payment_link_generation(request):
             'pgpl_brand_id': brand_id,
             'pgpl_brand_code': brand_code,
             'pgpl_item_id': item_id,
+            'pgpl_item_name': item_name,
             'pgpl_purchase_month': purchase_month,
             'pgpl_first_name': first_name,
             'pgpl_last_name': last_name,
@@ -106,7 +108,8 @@ def helper_payment_link_generation(request):
             'pgpl_term_type': term_type,
             'pgpl_plan_type': price_data['plan_type'],
             'pgpl_plan_title': price_data['plan_title'],
-            'pgpl_salesperson_id': sales_person_id
+            'pgpl_salesperson_id': sales_person_id,
+            'pgpl_salesperson_email':request.user.email
         }
 
         inserted_id = PolicyDAO.insert_partners_generate_payement_link(input_data)
@@ -117,7 +120,7 @@ def helper_payment_link_generation(request):
 
     category_info = get_create_plan_data(prod_id = 1)
     print('category_info:: ',category_info)
-    return {'category_info':category_info['category_info'], 'inserted_id': inserted_id}
+    return {'category_info':category_info['category_info'], 'inserted_id': inserted_id, 'host_url': host_url}
 
 def helper_insert_into_partneroffline(request):
     print("::POST::",request.POST)
@@ -193,6 +196,7 @@ def helper_get_brand_model(category_id = None, ctm_id = None, slab_codes = None)
         make_item_info = {}
         item_info = {}
         make_info = MasterDAO.get_make(category_id=category_id)
+        print('make_info:: ', make_info)
         slab_codes = slab_codes if slab_codes != "" and ',' in slab_codes else None
 
         if error is None and int(ctm_id) == 3:
@@ -206,6 +210,7 @@ def helper_get_brand_model(category_id = None, ctm_id = None, slab_codes = None)
         if error is None and len(make_info) > 0:
             item_data = {}
             item_data = MasterDAO.get_item(item_make_ids = make_ids, price_slab = slab_codes, category_ids = category_id)
+            print('item_data:: ', item_data)
 
             if len(item_data) > 0:
                 for item in item_data:
@@ -234,6 +239,7 @@ def helper_get_brand_model(category_id = None, ctm_id = None, slab_codes = None)
                     make_item_info[make_key_name]['make_name'] = make['make_name']
                     make_item_info[make_key_name]['item'] = item_info[make['make_id']] if make['make_id'] in item_info else {}
 
+        print('make_item_info::', make_item_info)
         return make_item_info
 
 def helper_get_item(brand, category_id):
@@ -282,6 +288,26 @@ def helper_get_partneroffline_data(request,partner_code):
     if len(partners_offline_policy_data) > 0:
         popd_data = partners_offline_policy_data
     return popd_data
+
+def helper_get_partners_generate_payement_link_data(request,partner_code):
+    init_info =  InitInfo.init(request)
+    partner_code = init_info['partner_code']
+    print(":partner_code:",partner_code)
+    popd_data = {}
+
+    #This is for the Master User who can see all his sales person entries
+    condition_query = {"pgpl_partner_code":partner_code}
+
+    #This will get only those entries which are created by the respective sales person.
+    if not init_info['is_master_user']:
+        condition_query = {"pgpl_partner_code":partner_code, 'pgpl_salesperson_email':request.user.email}
+
+    partners_offline_policy_data = PartnersDAO.get_partners_generate_payement_link_data(condition=condition_query,order_col='pgpl_addedon',order_by='DESC')
+
+    if len(partners_offline_policy_data) > 0:
+        popd_data = partners_offline_policy_data
+    return popd_data
+
 
 def helper_get_category(partner_code):
     prod_id = Common.partner_dict[partner_code]['prod_id']

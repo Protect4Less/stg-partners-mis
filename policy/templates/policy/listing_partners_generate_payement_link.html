@@ -22,38 +22,32 @@
                         <table id="datatable" class="table table-striped table-bordered">
                         <thead>
                             <tr>
-                            <th>Transaction Id</th>
-                            <th>Invoice Number</th>
-                            <th>Device</th>
-                            <th>Sub Device</th>
                             <th>Brand</th>
                             <th>Model</th>
-                            <th>Term Type</th>
-                            <th>Purchase Date</th>
+                            <th>Plan</th>
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Email ID</th>
-                            <th>Error Message</th>
                             <th>Status</th>
+                            <th>Sales Person Email</th>
+                            <th>Payment Link</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% if partneroffline_data|length > 0 %}
-                                {% for data in partneroffline_data %}
+                            {% if payement_link_data|length > 0 %}
+                                {% for data in payement_link_data %}
                                 <tr>
-                                    <td>{{ data.popd_id }}</td>
-                                    <td>{{ data.popd_invoice_no }}</td>
-                                    <td>{{ data.popd_device }}</td>
-                                    <td>{{ data.popd_sub_device }}</td>
-                                    <td>{{ data.popd_brand }}</td>
-                                    <td>{{ data.popd_model }}</td>
-                                    <td>{{ data.popd_term_type }}</td>
-                                    <td>{{ data.popd_purchase_month }}</td>
-                                    <td>{{ data.popd_first_name }}</td>
-                                    <td>{{ data.popd_last_name }}</td>
-                                    <td>{{ data.popd_email }}</td>   
-                                    <th>{{ data.popd_comment }}</th>                                  
-                                    <td>{{ data.popd_status }}</td>
+                                    <td>{{ data.pgpl_brand_code }}</td>
+                                    <td>{{ data.pgpl_item_name }}</td>
+                                    <td>{{ data.pgpl_plan_title }}</td>
+                                    
+                                    <td>{{ data.pgpl_first_name }}</td>
+                                    <td>{{ data.pgpl_last_name }}</td>
+                                    <td>{{ data.pgpl_email }}</td>   
+                                    <th>{{ data.pgpl_status }}</th>                                  
+                                    <td>{{ data.pgpl_salesperson_email }}</td>
+                                    <td>{{ host_url }}/partners/process-payment-link/{{ data.pgpl_id }}</td>
+
                                 </tr>
                                 {% endfor %}
                                 {% else %}

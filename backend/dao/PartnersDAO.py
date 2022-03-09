@@ -92,6 +92,35 @@ class PartnersDAO(object):
             dict(zip(columns, row))
             for row in cursor.fetchall()
         ]
+    
+    def get_partners_generate_payement_link_data(column='',condition='',order_col='',order_by=''):
+        sql_condition = ""
+        orderby = ""
+        for k,v in condition.items():
+            if "#" in k:
+                column_name, column_condition = k.split("#")
+                if(column_condition == "IN"):
+                    sql_condition += column_name+" "+column_condition+" ("+str(v)+") AND "
+                else:
+                    sql_condition += column_name+" "+column_condition+" "+str(v)+" AND "
+            else:
+                sql_condition += k+" "+(" IS NULL " if v is None else " = '"+str(v)+"'")+" AND "
+
+        sql_condition = sql_condition[:-5]
+
+        if order_by !='' and order_col !='':
+            orderby = " ORDER BY "+order_col+ " " +order_by
+
+        cursor = connection.cursor()
+        query = "SELECT * FROM "+config('P4L_DB_NAME')+".`partners_generate_payement_link` WHERE "+sql_condition+orderby
+        print(query)
+        cursor.execute(query)
+        columns = [col[0] for col in cursor.description]
+        #print(columns)
+        return [
+            dict(zip(columns, row))
+            for row in cursor.fetchall()
+        ]
 
     def insert_bsquaredwifi_offline_policy_data(data):
         inserted_id = ""
@@ -135,6 +164,32 @@ class PartnersDAO(object):
 
         cursor = connection.cursor()
         query = "SELECT * FROM "+config('P4L_DB_NAME')+".`bsquaredwifi_policy_data` WHERE "+sql_condition+orderby
+        print(query)
+        cursor.execute(query)
+        columns = [col[0] for col in cursor.description]
+        #print(columns)
+        return [
+            dict(zip(columns, row))
+            for row in cursor.fetchall()
+        ]
+
+    def get_msm(column='',condition=''):
+        sql_condition = ""
+        if len(condition) > 0:
+            for k,v in condition.items():
+                if "#" in k:
+                    column_name, column_condition = k.split("#")
+                    if(column_condition == "IN"):
+                        sql_condition += column_name+" "+column_condition+" ("+str(v)+") AND "
+                    else:
+                        sql_condition += column_name+" "+column_condition+" "+str(v)+" AND "
+                else:
+                    sql_condition += k+" "+(" IS NULL " if v is None else " = '"+str(v)+"'")+" AND "
+
+            sql_condition = sql_condition[:-5]
+            query = "SELECT * FROM "+config('DB_NAME')+".`master_slave_mapping` WHERE "+sql_condition
+
+        cursor = connection.cursor()
         print(query)
         cursor.execute(query)
         columns = [col[0] for col in cursor.description]
