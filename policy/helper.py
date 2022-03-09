@@ -120,7 +120,7 @@ def helper_payment_link_generation(request):
 
     category_info = get_create_plan_data(prod_id = 1)
     print('category_info:: ',category_info)
-    return {'category_info':category_info['category_info'], 'inserted_id': inserted_id, 'host_url': host_url}
+    return {'category_info':category_info['category_info'], 'inserted_id': inserted_id, 'host_url': host_url, 'partner_code': partner_code}
 
 def helper_insert_into_partneroffline(request):
     print("::POST::",request.POST)
