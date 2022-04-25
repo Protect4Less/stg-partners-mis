@@ -27,7 +27,7 @@ def initiate(request):
         return render(request,template_name,context)
 
     # This is for intserting into PartnerOffline table
-    if partner_code !="" and partner_code in ['1032']:
+    if partner_code !="" and partner_code in ['1032','1041']:
         if request.method == 'POST':
             inserted_id = helper_insert_into_partneroffline(request)
             if inserted_id is not None or inserted_id != "":
