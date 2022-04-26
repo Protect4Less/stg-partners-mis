@@ -14,6 +14,7 @@ def initiate(request):
     # print(type(request.session['partner_code']))
     init_info =  InitInfo.init(request)
     partner_code = init_info['partner_code']
+    partner_location = init_info['partner_location'] if init_info['partner_location'] else ''
     # partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
     print(partner_code)
     # This is for generating Payment link
@@ -37,7 +38,8 @@ def initiate(request):
         print(":category_dropdown:",category_dropdown)
         plan_type_dropdown = helper_plan_type(partner_code)
         print(":plan_type_dropdown:",plan_type_dropdown)
-        context = {"category_dropdown":category_dropdown, "plan_type_dropdown":plan_type_dropdown, 'partner_code':partner_code}
+        context = {"category_dropdown":category_dropdown, "plan_type_dropdown":plan_type_dropdown, 'partner_code':partner_code,
+        "partner_location": partner_location}
         return render(request,template_name,context)
 
     # exit()
@@ -164,6 +166,10 @@ def listings(request):
     print('init_info:: ', init_info)
     partner_code = init_info['partner_code']
     is_payment_link_generation_partner = init_info['is_payment_link_generation_partner']
+
+    # print('\n==================================================\n')
+    # print("is_payment_link_generation_partner ", is_payment_link_generation_partner)
+    # print('\n==================================================\n')
 
     # try:
     #     # partner_code = request.session['partner_code'] if 'partner_code' in request.session else None

@@ -12,6 +12,7 @@ class InitInfo():
 		master_slave_email_ids = []
 		is_master_user = False
 		is_payment_link_generation_partner = False
+		partner_location = None
 		#This code block will check the User is Slave and assign Partner Code
 		# msm => Master Slave Mapping
 		msm_obj_slave = PartnersDAO.get_msm(condition={'msm_slave_email':email_id}) 
@@ -20,6 +21,7 @@ class InitInfo():
 		if msm_obj_slave is not None:
 			print('msm_obj_slave:: ',msm_obj_slave)
 			partner_code = msm_obj_slave[0]['msm_partner_code']
+			partner_location = msm_obj_slave[0]['msm_location']
 		
 		if partner_code is None:
 			partners_code = PartnersDAO.get_partners('partners_code',condition={'partners_mis_userid':user_id})
@@ -39,7 +41,9 @@ class InitInfo():
 		
 		return {
 			'partner_code': partner_code,
+			'partner_location': partner_location,
 			'user_id': user_id,
+			'user_email_id': email_id,
 			'is_master_user': is_master_user,
 			'is_payment_link_generation_partner': is_payment_link_generation_partner,
 			'host_url': Common.host_url

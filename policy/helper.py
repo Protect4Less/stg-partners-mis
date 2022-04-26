@@ -123,7 +123,8 @@ def helper_payment_link_generation(request):
     return {'category_info':category_info['category_info'], 'inserted_id': inserted_id, 'host_url': host_url, 'partner_code': partner_code}
 
 def helper_insert_into_partneroffline(request, partner_code):
-    print("::POST::",request.POST)
+    # print("\n\n::POST::",request.POST)
+    # print("\n\n::USER::",request.user)
     insertedid = None
     invoice_number = request.POST.get('invoice_number','')
     sku = request.POST.get('sku','')
@@ -145,9 +146,11 @@ def helper_insert_into_partneroffline(request, partner_code):
     term_type = request.POST.get('term_type','')
     device_value = request.POST.get('device_value','')
     device_currency = request.POST.get('device_currency','')
+    popd_salesperson_email = request.user
+
     
     try:
-        inserted_id = PartnersDAO.insert_partners_offline_policy_data(data= {'popd_partner_code': partner_code, 'popd_location':location,'popd_invoice_no':invoice_number, 'popd_device': device, 'popd_sub_device':sub_device, 'popd_brand':brand, 'popd_model':model, 'popd_purchase_month':purchase_date, 'popd_first_name':first_name, 'popd_last_name':last_name, 'popd_email':email_id, 'popd_mobile_number':mobile_number, 'popd_imei_serial_no': imei_serial_no if imei_serial_no is not '' else '', 'popd_term_type':term_type, 'popd_invoice_value':device_value if device_value is not '' else 0.00, 'popd_device_currency':device_currency, 'popd_sku':sku })
+        inserted_id = PartnersDAO.insert_partners_offline_policy_data(data= {'popd_partner_code': partner_code, 'popd_location':location,'popd_invoice_no':invoice_number, 'popd_device': device, 'popd_sub_device':sub_device, 'popd_brand':brand, 'popd_model':model, 'popd_purchase_month':purchase_date, 'popd_first_name':first_name, 'popd_last_name':last_name, 'popd_email':email_id, 'popd_mobile_number':mobile_number, 'popd_imei_serial_no': imei_serial_no if imei_serial_no is not '' else '', 'popd_term_type':term_type, 'popd_invoice_value':device_value if device_value is not '' else 0.00, 'popd_device_currency':device_currency, 'popd_sku':sku, 'popd_salesperson_email': popd_salesperson_email})
         print(":inserted_id:",inserted_id)
     except Exception as e:
         inserted_id = insertedid
@@ -286,9 +289,18 @@ def helper_get_partneroffline_data(request,partner_code):
     # partner_code = request.session['partner_code'] if 'partner_code' in request.session else partner_code
     init_info =  InitInfo.init(request)
     partner_code = init_info['partner_code']
-    print(":partner_code:",partner_code)
+    # print(":partner_code:",partner_code)
+
+    # print('\n==================================================\n')
+    # print("init_info ", init_info)
+    # print("\npartner_code ", partner_code)
+    # print('\n==================================================\n')
+
+    query_condition = {"popd_partner_code": partner_code,}
+    if not init_info['is_master_user']: query_condition["popd_salesperson_email"] = init_info['user_email_id']
+
     popd_data = {}
-    partners_offline_policy_data = PartnersDAO.get_partners_offline_policy_data(column = "popd_id, popd_invoice_no, popd_sku, popd_device, popd_brand, popd_model, popd_purchase_month, popd_first_name, popd_last_name, popd_email, popd_mobile_number, popd_imei_serial_no, popd_term_type, popd_device_value, popd_device_currency, popd_s_id, popd_up_id, popd_tran_id, popd_policy_no, popd_comment, popd_status",condition={"popd_partner_code":partner_code},order_col='popd_addedon',order_by='DESC')
+    partners_offline_policy_data = PartnersDAO.get_partners_offline_policy_data(column = "popd_id, popd_invoice_no, popd_sku, popd_device, popd_brand, popd_model, popd_purchase_month, popd_first_name, popd_last_name, popd_email, popd_mobile_number, popd_imei_serial_no, popd_term_type, popd_device_value, popd_device_currency, popd_s_id, popd_up_id, popd_tran_id, popd_policy_no, popd_comment, popd_status",condition = query_condition, order_col='popd_addedon',order_by='DESC')
 
     if len(partners_offline_policy_data) > 0:
         popd_data = partners_offline_policy_data

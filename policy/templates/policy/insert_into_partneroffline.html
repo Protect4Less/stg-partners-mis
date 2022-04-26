@@ -40,7 +40,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="location">Location <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="location" name="location" class="form-control col-md-7 col-xs-12" required="required" value="SATWA" readonly>
+                            <input type="text" id="location" name="location" class="form-control col-md-7 col-xs-12" required="required" value="{{ partner_location }}" {% if partner_location %}readonly{% endif %}>
                             </div>
                         </div>
                         <div class="form-group">
