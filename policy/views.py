@@ -27,9 +27,9 @@ def initiate(request):
         return render(request,template_name,context)
 
     # This is for intserting into PartnerOffline table
-    if partner_code !="" and partner_code in ['1032','1041']:
+    if partner_code !="" and partner_code in ['1032', '1041']:
         if request.method == 'POST':
-            inserted_id = helper_insert_into_partneroffline(request)
+            inserted_id = helper_insert_into_partneroffline(request, partner_code)
             if inserted_id is not None or inserted_id != "":
                 return redirect('policy:listings')
         template_name = 'policy/insert_into_partneroffline.html'
@@ -192,8 +192,13 @@ def listings(request):
 
 @csrf_exempt
 def cat_name_id_ajax(request):
-    print(request.POST)
+    print("request.POST in cat_name_id_ajax", request.POST)
     cat_name = request.POST.get('name', None)
+    print("cat_name cat_name_id_ajax", cat_name)
+    
+    # Extra Check Added for cat_name if string comes with':'
+    cat_name = cat_name.split(':')[0] if cat_name and ':' in cat_name else cat_name
+    print("Update Cat_Name", cat_name)
 
     category_data = {}
     error = "Invalid request" if request.method != "POST" else None

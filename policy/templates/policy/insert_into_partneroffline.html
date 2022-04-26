@@ -51,7 +51,8 @@
                                     <option value="">Select a Device</option>
                                     {% if category_dropdown %}
                                         {% for key, value  in category_dropdown.items %}
-                                            <option value="{{value}}">{{key}}</option>
+                                            <option value="{{value}}:{{key}}">{{key}}</option>
+                                            {% comment %}<option value="{{value}}">{{key}}</option>{% endcomment %}
                                         {% endfor %}
                                     {% endif %}
                                     {% comment %}<option>Consumer Electronics</option>
@@ -75,7 +76,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sub_device">Sub Device <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="sub_device" name="sub_device" class="form-control col-md-7 col-xs-12" required="required">
+                            <input type="text" id="sub_device" name="sub_device" class="form-control col-md-7 col-xs-12" required="required"  readonly="readonly">
                             </div>
                         </div>
                         <div class="form-group">
@@ -195,7 +196,8 @@ $(function() {
         //alert($(this).val());return false;
         
         var cat = $(this).val();
-        $("#sub_device").val(cat)
+        // $("#sub_device").val(cat)
+        $("#sub_device").val(cat.split(':')[0])
         $.post(url = "/policy/get-cat-name-id",
         {
             name: cat
