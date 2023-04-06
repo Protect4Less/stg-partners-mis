@@ -61,7 +61,7 @@ class Common:
             "category_data": {
                 'Mobile Phones': 'Mobile Phone',
                 'Tablets': 'Tablet',
-                'Smart Watches': 'Smart Watch',
+                'Smart Watch': 'Smart Watch',
                 'Laptops': 'Laptop',
             }
         },
