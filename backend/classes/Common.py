@@ -59,10 +59,10 @@ class Common:
                 'PEWGPI24M': '24 months EW GCC Plus India',
             },
             "category_data": {
-                'Mobile Phones': 'Mobile Phone',
-                'Tablets': 'Tablet',
+                'Mobile Phones': 'Mobile Phones',
+                'Tablets': 'Tablets',
                 'Smart Watches': 'Smart Watch',
-                'Laptops': 'Laptop',
+                'Laptops': 'Laptops',
             }
         },
     }
