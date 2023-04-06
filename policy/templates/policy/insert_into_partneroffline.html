@@ -51,7 +51,7 @@
                                     <option value="">Select a Device</option>
                                     {% if category_dropdown %}
                                         {% for key, value  in category_dropdown.items %}
-                                            <option value="{{ value }}">{{ key }}</option>
+                                            <option value="{{ value }}:{{ key }}">{{ key }}</option>
                                         {% endfor %}
                                     {% endif %}
                                     {% comment %}
@@ -197,13 +197,6 @@
 <script src="{% static 'js/jQuery-Smart-Wizard/jquery.smartWizard.js' %}"></script>
 
     <script type="text/javascript">
-        // Reset form
-        {#$('#reset-form').on('click', function() {#}
-        {#    alert();#}
-        {#    // $('#demo-form2').trigger("reset");#}
-        {#    $('#demo-form2')[0].reset();#}
-        {#})#}
-
         var cat_id = null
         $(function () {
             $("#category").on('change', function () {
