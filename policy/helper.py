@@ -131,7 +131,7 @@ def helper_insert_into_partneroffline(request, partner_code):
     sku = request.POST.get('sku', '')
     location = request.POST.get('location', '')
     device = request.POST.get('category', '')
-    device = device.split(':')[0] if device else ''
+    device = device.split(':')[1] if device else ''
     sub_device = request.POST.get('sub_device', '')
     brand = request.POST.get('brand', '')
     model = request.POST.get('model', '')
