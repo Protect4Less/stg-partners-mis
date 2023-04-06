@@ -79,13 +79,12 @@ def get_model_ajax(request):
     brand = request.POST.get('brand', None)
 
     error = "No brand selected" if brand is None or brand == '' else None
-
     print('error:: ', error)
 
     model = None
     if error is None:
         model = helper_get_item(brand=brand, category_id=category_id)
-        print('models :: ', model)
+        # print('models :: ', model)
         error = error if error is not None else "No data found" if len(model) == 0 else None
 
     if error is None:

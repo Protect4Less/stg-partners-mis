@@ -233,7 +233,7 @@
                                         make_id = data[key].make_id;
                                         make_name = data[key].make_name;
                                         make_code = data[key].make_code;
-                                        $('#brand').append($('<option>', {value: make_name, text: make_name}));
+                                        $('#brand').append($('<option>', {value: make_code, text: make_name}));
                                     });
                                 },
                                 error: function (jqXHR, textStatus, errorThrown) {
