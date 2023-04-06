@@ -7,43 +7,47 @@ from .helper import *
 import csv, io
 from django.contrib import messages
 
-# Create your views here.
 
 def initiate(request):
     # print(request.session['partner_code'])
     # print(type(request.session['partner_code']))
-    init_info =  InitInfo.init(request)
+
+    init_info = InitInfo.init(request)
     partner_code = init_info['partner_code']
-    partner_location = init_info['partner_location'] if init_info['partner_location'] else ''
     # partner_code = request.session['partner_code'] if 'partner_code' in request.session else None
-    print(partner_code)
+
     # This is for generating Payment link
-    if partner_code in ['1034','1035','1036','1042']:
+    if partner_code in ['1034', '1035', '1042']:
         context = helper_payment_link_generation(request)
         # print(payment_link)
         template_name = 'policy/payment_link_generation.html'
         # context = {'retailer_summary':retailer_summary,'categories_dropdown':categories_dropdown}
         # context = {}
+        return render(request, template_name, context)
 
-        return render(request,template_name,context)
-
-    # This is for intserting into PartnerOffline table
-    if partner_code !="" and partner_code in ['1032', '1041']:
+    # This is for inserting into Partner Offline table
+    if partner_code != "" and partner_code in ['1032', '1071']:
         if request.method == 'POST':
             inserted_id = helper_insert_into_partneroffline(request, partner_code)
             if inserted_id is not None or inserted_id != "":
+                messages.success(request, 'You have successfuly submited the record. We will process your Policy record shortly To check the latest update please check Policy List.')
                 return redirect('policy:listings')
+            else:
+                messages.error(request, 'Oops! Something went wrong while processing the data. Please contact Protect4Less Technical Team.')
+
         template_name = 'policy/insert_into_partneroffline.html'
         category_dropdown = helper_get_category(partner_code)
-        print(":category_dropdown:",category_dropdown)
         plan_type_dropdown = helper_plan_type(partner_code)
-        print(":plan_type_dropdown:",plan_type_dropdown)
-        context = {"category_dropdown":category_dropdown, "plan_type_dropdown":plan_type_dropdown, 'partner_code':partner_code,
-        "partner_location": partner_location}
-        return render(request,template_name,context)
+        context = {
+            "category_dropdown": category_dropdown,
+            "plan_type_dropdown": plan_type_dropdown,
+            'partner_code': partner_code,
+            'partner_location': init_info['partner_location'] if init_info['partner_location'] else "",
+        }
+        return render(request, template_name, context)
 
-    # exit()
     return redirect('dashboard:dashboard')
+
 
 @csrf_exempt
 def get_brand_model_ajax(request):
@@ -62,24 +66,26 @@ def get_brand_model_ajax(request):
     # print(make_item_info)
     return JsonResponse(make_item_info)
 
+
 @csrf_exempt
 def get_model_ajax(request):
     error = None
-    response_data,brand = {},{}
+    response_data, brand = {}, {}
 
     error = 'Invalid Request Type' if not request.POST else None
     error = error if error else 'Request is not Ajax Type' if not request.is_ajax else None
 
-    category_id = request.POST.get('category_id',None)
-    brand = request.POST.get('brand',None)
+    category_id = request.POST.get('category_id', None)
+    brand = request.POST.get('brand', None)
 
-    error  = "No brand selected" if brand is None or brand  == '' else None
+    error = "No brand selected" if brand is None or brand == '' else None
 
-    print('error:: ',error)
+    print('error:: ', error)
 
+    model = None
     if error is None:
-        model = helper_get_item(brand = brand, category_id = category_id )
-        print('model:: ', model)
+        model = helper_get_item(brand=brand, category_id=category_id)
+        print('models :: ', model)
         error = error if error is not None else "No data found" if len(model) == 0 else None
 
     if error is None:
@@ -92,9 +98,10 @@ def get_model_ajax(request):
         "code": ("200" if status else "201"),
         "message": error,
         "messageDesc": "",
-        "responseData":response_data,
+        "responseData": response_data,
     }
     return JsonResponse(response)
+
 
 @csrf_exempt
 def get_plan_price_ajax(request):
@@ -158,13 +165,15 @@ def get_plan_price_ajax(request):
 
 
 def listings(request):
-    # This is for intserting into PartnerOffline table
-    #print("sess==",request.session['partner_code'])
-    #print(type(request.session['partner_code']))
-    init_info =  InitInfo.init(request)
+    print("\n\n"), print("request.user EmailID \t::", request.user), print("\n\n")
+    # This is for inserting into PartnerOffline table
+    # print("sess==",request.session['partner_code'])
+    # print(type(request.session['partner_code']))
+    init_info = InitInfo.init(request)
 
     print('init_info:: ', init_info)
     partner_code = init_info['partner_code']
+    print("\n\n"), print("Listing page partner_code \t::", partner_code), print("\n\n")
     is_payment_link_generation_partner = init_info['is_payment_link_generation_partner']
 
     # print('\n==================================================\n')
@@ -180,20 +189,21 @@ def listings(request):
 
     # if partner_code !="" and partner_code in ['1032','1044']:
 
-    #This code is for Payment Link Generation Partner
+    # This code is for Payment Link Generation Partner
     if is_payment_link_generation_partner:
         template_name = 'policy/listing_partners_generate_payement_link.html'
-        payement_link_data = helper_get_partners_generate_payement_link_data(request,partner_code)
-        print('payement_link_data==',payement_link_data)
-        context = {'payement_link_data':payement_link_data, 'partner_code':partner_code, 'host_url': init_info['host_url'] }
-        return render(request,template_name,context)
+        payement_link_data = helper_get_partners_generate_payement_link_data(request, partner_code)
+        print('payement_link_data==', payement_link_data)
+        context = {'payement_link_data': payement_link_data, 'partner_code': partner_code,
+                   'host_url': init_info['host_url']}
+        return render(request, template_name, context)
 
-    if partner_code !="" and is_payment_link_generation_partner is False:
+    if partner_code != "" and is_payment_link_generation_partner is False:
         template_name = 'policy/listings_partneroffline.html'
-        partneroffline_data = helper_get_partneroffline_data(request,partner_code)
-        print('partneroffline_data==',partneroffline_data)
-        context = {'partneroffline_data':partneroffline_data, 'partner_code':partner_code}
-        return render(request,template_name,context)
+        partneroffline_data = helper_get_partneroffline_data(request, partner_code)
+        print('partneroffline_data==', partneroffline_data)
+        context = {'partneroffline_data': partneroffline_data, 'partner_code': partner_code}
+        return render(request, template_name, context)
 
 
 @csrf_exempt
@@ -211,10 +221,11 @@ def cat_name_id_ajax(request):
     error = error if error is not None else "Category Name is missing" if cat_name is None or cat_name.strip() == "" else error
 
     if error is None:
-        category_data = MasterDAO.get_category(cat_name = cat_name, cat_status_check = False)
+        category_data = MasterDAO.get_category(cat_name=cat_name, cat_status_check=False)
         if len(category_data) > 0:
             category_data = category_data[0]
     return JsonResponse(category_data)
+
 
 @csrf_exempt
 def bulk_upload(request):

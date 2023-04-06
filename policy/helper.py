@@ -6,6 +6,7 @@ from backend.classes.Common import *
 from backend.classes.InitInfo import InitInfo
 from .config import *
 
+
 def helper_payment_link_generation(request):
     print(request.POST)
 
@@ -122,39 +123,54 @@ def helper_payment_link_generation(request):
     print('category_info:: ',category_info)
     return {'category_info':category_info['category_info'], 'inserted_id': inserted_id, 'host_url': host_url, 'partner_code': partner_code}
 
+
 def helper_insert_into_partneroffline(request, partner_code):
-    # print("\n\n::POST::",request.POST)
-    # print("\n\n::USER::",request.user)
+    print("\n\n"), print("insert_into_partneroffline \t:", request.POST), print("\n\n")
     insertedid = None
-    invoice_number = request.POST.get('invoice_number','')
-    sku = request.POST.get('sku','')
-    location = request.POST.get('location','')
-    device = request.POST.get('category','')
-
-    # Extra Check Added for device if string comes with':'
-    device = device.split(':')[1] if device and ':' in device else device
-
-    sub_device = request.POST.get('sub_device','')
-    brand = request.POST.get('brand','')
-    model = request.POST.get('model','')
-    purchase_date = request.POST.get('purchase_date','')
-    first_name = request.POST.get('first_name','')
-    last_name = request.POST.get('last_name','')
-    email_id = request.POST.get('email_id','')
-    mobile_number = request.POST.get('mobile_number','')
-    imei_serial_no = request.POST.get('imei_serial_no','')
-    term_type = request.POST.get('term_type','')
-    device_value = request.POST.get('device_value','')
-    device_currency = request.POST.get('device_currency','')
-    popd_salesperson_email = request.user
-
-    
+    invoice_number = request.POST.get('invoice_number', '')
+    sku = request.POST.get('sku', '')
+    location = request.POST.get('location', '')
+    device = request.POST.get('category', '')
+    sub_device = request.POST.get('sub_device', '')
+    brand = request.POST.get('brand', '')
+    model = request.POST.get('model', '')
+    purchase_date = request.POST.get('purchase_date', '')
+    first_name = request.POST.get('first_name', '')
+    last_name = request.POST.get('last_name', '')
+    email_id = request.POST.get('email_id', '')
+    mobile_number = request.POST.get('mobile_number', '')
+    imei_serial_no = request.POST.get('imei_serial_no', '')
+    term_type = request.POST.get('term_type', '')
+    device_value = request.POST.get('device_value', '')
+    device_currency = request.POST.get('device_currency', '')
+    salesperson_email = request.user
     try:
-        inserted_id = PartnersDAO.insert_partners_offline_policy_data(data= {'popd_partner_code': partner_code, 'popd_location':location,'popd_invoice_no':invoice_number, 'popd_device': device, 'popd_sub_device':sub_device, 'popd_brand':brand, 'popd_model':model, 'popd_purchase_month':purchase_date, 'popd_first_name':first_name, 'popd_last_name':last_name, 'popd_email':email_id, 'popd_mobile_number':mobile_number, 'popd_imei_serial_no': imei_serial_no if imei_serial_no is not '' else '', 'popd_term_type':term_type, 'popd_invoice_value':device_value if device_value is not '' else 0.00, 'popd_device_currency':device_currency, 'popd_sku':sku, 'popd_salesperson_email': popd_salesperson_email})
-        print(":inserted_id:",inserted_id)
+        inserted_id = PartnersDAO.insert_partners_offline_policy_data(
+            data={
+                'popd_partner_code': partner_code,
+                'popd_location': location,
+                'popd_invoice_no': invoice_number,
+                'popd_device': device,
+                'popd_sub_device': sub_device,
+                'popd_brand': brand,
+                'popd_model': model,
+                'popd_purchase_month': purchase_date,
+                'popd_first_name': first_name,
+                'popd_last_name': last_name,
+                'popd_email': email_id,
+                'popd_mobile_number': mobile_number,
+                'popd_imei_serial_no': imei_serial_no if imei_serial_no is not '' else '',
+                'popd_term_type': term_type,
+                'popd_invoice_value': device_value if device_value is not '' else 0.00,
+                'popd_device_currency': device_currency,
+                'popd_sku': sku,
+                'popd_salesperson_email': salesperson_email,
+            }
+        )
+        print(":inserted_id:", inserted_id)
     except Exception as e:
+        print(f"partner offline insert Error \t::", e)
         inserted_id = insertedid
-
     return {'inserted_id': inserted_id}
 
 
@@ -195,6 +211,7 @@ def get_create_plan_data(prod_id = None, ctm_id = None, slab_codes = None):
 
         create_plan_data = {"category_info":category_info,"category_ids":category_ids}
         return create_plan_data
+
 
 def helper_get_brand_model(category_id = None, ctm_id = None, slab_codes = None):
         error = "category_id is missing" if category_id is None or category_id.strip() == "" else None
@@ -250,14 +267,18 @@ def helper_get_brand_model(category_id = None, ctm_id = None, slab_codes = None)
         print('make_item_info::', make_item_info)
         return make_item_info
 
+
 def helper_get_item(brand, category_id):
 
     error = "category_id is missing" if brand is None or brand.strip() == "" else None
     error = error if error is not None else "brand" if brand is None or brand.strip() == "" else error
 
-    item_data = MasterDAO.get_item_all(column='item_id,item_code, item_name, item_price_slab, item_base_value',condition={'item_make_code':brand, 'item_cat_id': category_id, 'item_status':'active'})
-
+    item_data = MasterDAO.get_item_all(
+        column='item_id, item_code, item_name, item_price_slab, item_base_value',
+        condition={'item_make_code': brand, 'item_cat_id': category_id, 'item_status': 'active'}
+    )
     return item_data
+
 
 def helper_get_plan_price(month_key = None, price_slab = None, category = None, plan_type = None):
 
@@ -285,9 +306,10 @@ def helper_get_plan_price(month_key = None, price_slab = None, category = None, 
 
     return response
 
+
 def helper_get_partneroffline_data(request,partner_code):
     # partner_code = request.session['partner_code'] if 'partner_code' in request.session else partner_code
-    init_info =  InitInfo.init(request)
+    init_info = InitInfo.init(request)
     partner_code = init_info['partner_code']
     # print(":partner_code:",partner_code)
 
@@ -299,12 +321,19 @@ def helper_get_partneroffline_data(request,partner_code):
     query_condition = {"popd_partner_code": partner_code,}
     if not init_info['is_master_user']: query_condition["popd_salesperson_email"] = init_info['user_email_id']
 
+    print("\n\n"), print("query_condition \t:", query_condition), print("\n\n")
     popd_data = {}
-    partners_offline_policy_data = PartnersDAO.get_partners_offline_policy_data(column = "popd_id, popd_invoice_no, popd_sku, popd_device, popd_brand, popd_model, popd_purchase_month, popd_first_name, popd_last_name, popd_email, popd_mobile_number, popd_imei_serial_no, popd_term_type, popd_device_value, popd_device_currency, popd_s_id, popd_up_id, popd_tran_id, popd_policy_no, popd_comment, popd_status",condition = query_condition, order_col='popd_addedon',order_by='DESC')
+    partners_offline_policy_data = PartnersDAO.get_partners_offline_policy_data(
+        column="popd_id, popd_invoice_no, popd_sku, popd_device, popd_brand, popd_model, popd_purchase_month, popd_first_name, popd_last_name, popd_email, popd_mobile_number, popd_imei_serial_no, popd_term_type, popd_device_value, popd_device_currency, popd_s_id, popd_up_id, popd_tran_id, popd_policy_no, popd_comment, popd_status",
+        condition=query_condition,
+        order_col='popd_addedon',
+        order_by='DESC'
+    )
 
     if len(partners_offline_policy_data) > 0:
         popd_data = partners_offline_policy_data
     return popd_data
+
 
 def helper_get_partners_generate_payement_link_data(request,partner_code):
     init_info =  InitInfo.init(request)
@@ -328,13 +357,11 @@ def helper_get_partners_generate_payement_link_data(request,partner_code):
 
 def helper_get_category(partner_code):
     prod_id = Common.partner_dict[partner_code]['prod_id']
-    print(":prod_id:",prod_id)
     geo = Common.partner_dict[partner_code]['geo']
-    print(":geo:",geo)
-    #category_data = MasterDAO.get_category(cat_geo = geo,cat_prod_id = prod_id, cat_status_check = False)
+    # category_data = MasterDAO.get_category(cat_geo = geo,cat_prod_id = prod_id, cat_status_check = False)
     category_data = Common.partner_dict[partner_code]["category_data"]
-    print(":category_data:",category_data)
     return category_data
+
 
 def helper_plan_type(partner_code):
     partner_dict = Common.partner_dict[partner_code]
@@ -342,6 +369,7 @@ def helper_plan_type(partner_code):
     plan_type = partner_dict["plan_type"]
     print(":plan_type:",plan_type)
     return plan_type
+
 
 def helper_get_bsquaredwifi_data(request,partner_code):
     # partner_code = request.session['partner_code'] if 'partner_code' in request.session else partner_code
@@ -356,6 +384,7 @@ def helper_get_bsquaredwifi_data(request,partner_code):
         return bw_data
     else:
         return "{}"
+
 
 def helper_quix_standard_plan_price(month_key, plan_type,price_slab):
     print('month_key:: ',month_key)
@@ -467,6 +496,7 @@ def helper_quix_standard_plan_price(month_key, plan_type,price_slab):
     }
 
     return response
+
 
 def helper_get_devicevalue(device_cost):
     device_cost = float(device_cost)

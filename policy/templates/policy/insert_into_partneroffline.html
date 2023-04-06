@@ -26,7 +26,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="invoice_number">Invoice Number <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="invoice_number" name="invoice_number" class="form-control col-md-7 col-xs-12" required="required">
+                            <input type="text" id="invoice_number" name="invoice_number" class="form-control col-md-7 col-xs-12" required="required" autocomplete="off">
                             </div>
                         </div>
                         {% comment %}<div class="form-group">
@@ -51,11 +51,12 @@
                                     <option value="">Select a Device</option>
                                     {% if category_dropdown %}
                                         {% for key, value  in category_dropdown.items %}
-                                            <option value="{{value}}:{{key}}">{{key}}</option>
-                                            {% comment %}<option value="{{value}}">{{key}}</option>{% endcomment %}
+                                            <option value="{{ value }}">{{ key }}</option>
                                         {% endfor %}
                                     {% endif %}
-                                    {% comment %}<option>Consumer Electronics</option>
+                                    {% comment %}
+                                    <option value="{{value}}">{{key}}</option>
+                                    <option>Consumer Electronics</option>
                                     <option>Home Appliances - Non-Portable</option>
                                     <option>Desktops</option>
                                     <option>Printers</option>
@@ -68,39 +69,43 @@
                                     <option>Mobile Phones</option>
                                     <option>Smartphones</option>
                                     <option>Phablets</option>
-                                    <option>White Goods</option>{% endcomment %}
+                                    <option>White Goods</option>
+                                    {% endcomment %}
                                 </select>
                             </div>
                         </div>
+
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sub_device">Sub Device <span class="required">*</span>
-                            </label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sub_device">Sub Device <span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="sub_device" name="sub_device" class="form-control col-md-7 col-xs-12" required="required"  readonly="readonly">
+                                <input type="text" id="sub_device" name="sub_device" class="form-control col-md-7 col-xs-12" required="required"  readonly="readonly">
                             </div>
                         </div>
+
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="brand">Brand <span class="required">*</span>
-                            </label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="brand">Brand <span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                             {% comment %}<input type="text" id="brand" name="brand" class="form-control col-md-7 col-xs-12">{% endcomment %}
-                            <select class="form-control col-md-7 col-xs-12" name="brand" id="brand" required>
+                            <select class="form-control col-md-7 col-xs-12" name="brand" id="brand" onchange="get_brand_models()" required>
                                 <option value="">Select a Brand</option>
                             </select>
                             </div>
                         </div>
+
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="model">Model <span class="required">*</span>
-                            </label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="model">Model <span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="model" name="model" class="form-control col-md-7 col-xs-12" required="required">
+                            {% comment %}<input type="text" id="model" name="model" class="form-control col-md-7 col-xs-12" required="required">{% endcomment %}
+                             <select class="form-control col-md-7 col-xs-12" name="model" id="model" required>
+                                <option value="">Select a Model</option>
+                            </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="purchase_date">Purchase Date <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12 input-group date" id='myDatepicker'>
-                                <input type="text" id="purchase_date" name="purchase_date" class="form-control col-md-7 col-xs-12" required="required">                            
+                                <input type="text" id="purchase_date" name="purchase_date" class="form-control col-md-7 col-xs-12" required="required" autocomplete="off">
                             
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
@@ -111,34 +116,34 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first_name">First Name <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="first_name" name="first_name" class="form-control col-md-7 col-xs-12" required="required">
+                            <input type="text" id="first_name" name="first_name" class="form-control col-md-7 col-xs-12" required="required" autocomplete="off">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last_name">Last Name <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="last_name" name="last_name" class="form-control col-md-7 col-xs-12" required="required">
+                            <input type="text" id="last_name" name="last_name" class="form-control col-md-7 col-xs-12" required="required" autocomplete="off">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="email_id" class="control-label col-md-3 col-sm-3 col-xs-12">Email ID <span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id="email_id" name="email_id" class="form-control col-md-7 col-xs-12" type="text" required="required">
+                            <input id="email_id" name="email_id" class="form-control col-md-7 col-xs-12" type="email" required="required" autocomplete="off">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="mobile_number">Mobile Number <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="mobile_number" name="mobile_number" class="form-control col-md-7 col-xs-12" required="required">
+                            <input type="number" id="mobile_number" name="mobile_number" class="form-control col-md-7 col-xs-12" required="required" autocomplete="off">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="imei_serial_no">Imei / Serial Number <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="imei_serial_no" name="imei_serial_no" class="form-control col-md-7 col-xs-12" required="required">
+                            <input type="text" id="imei_serial_no" name="imei_serial_no" class="form-control col-md-7 col-xs-12" required="required" autocomplete="off">
                             </div>
                         </div>
                         <div class="form-group">
@@ -159,7 +164,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="device_value">Device Value <span class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="device_value" name="device_value" class="form-control col-md-7 col-xs-12" required="required">
+                            <input type="text" id="device_value" name="device_value" class="form-control col-md-7 col-xs-12" required="required" autocomplete="off">
                             </div>
                         </div>
                         <div class="form-group">
@@ -172,7 +177,7 @@
                         <div class="ln_solid"></div>
                         <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            <button class="btn btn-primary" type="reset">Reset</button>
+                            <input class="btn btn-primary" value="Reset" type="button" onclick="this.form.reset();">
                             <button type="submit" class="btn btn-success">Submit</button>
                             </div>
                         </div>
@@ -190,66 +195,103 @@
 <script src="{% static 'js/parsleyjs/dist/parsley.min.js'%}"></script>
 <!-- jQuery Smart Wizard -->
 <script src="{% static 'js/jQuery-Smart-Wizard/jquery.smartWizard.js' %}"></script>
-<script type="text/javascript">
-$(function() {
-    $("#category").on('change', function() {
-        //alert($(this).val());return false;
-        
-        var cat = $(this).val();
-        // $("#sub_device").val(cat)
-        $("#sub_device").val(cat.split(':')[0])
-        $.post(url = "/policy/get-cat-name-id",
-        {
-            name: cat
-        },
-        function(data, status){
-            console.log(data['cat_id']);
-            cat_id = data['cat_id'];
 
-            if(cat_id != "") {
-                $.ajax({
-                    url: "{% url 'policy:brand-model' %}",
-                    type: "POST",
-                    cache: false,
-                    data: {
-                        'id': cat_id,
-                        'ctm_id':1,
-                        'slab_codes':''
-                    },
-                    dataType: 'json',
-                    beforeSend: function(){
-                        $('#brand').html('');
-                        $('#brand').append($('<option value="0">Select a Brand</option>'));
-                        $('#ajax-loader-fullpage').show();
-                    },
-                    success: function (data) {
-                            // brand_list(data, brand_name, model_name)
-                            console.log(data)
-                            Object.keys(data).forEach(function(key) {
-                                make_id = data[key].make_id;
-                                make_name = data[key].make_name;
-                                make_code = data[key].make_code;
-                                $('#brand').append($('<option>',{value:make_name, text :make_name}));
+    <script type="text/javascript">
+        // Reset form
+        {#$('#reset-form').on('click', function() {#}
+        {#    alert();#}
+        {#    // $('#demo-form2').trigger("reset");#}
+        {#    $('#demo-form2')[0].reset();#}
+        {#})#}
+
+        var cat_id = null
+        $(function () {
+            $("#category").on('change', function () {
+                //alert($(this).val());return false;
+
+                var cat = $(this).val();
+                // $("#sub_device").val(cat)
+                $("#sub_device").val(cat.split(':')[0])
+                $.post(url = "/policy/get-cat-name-id",
+                    {name: cat},
+                    function (data, status) {
+                        console.log("cat_id :: " + data['cat_id']);
+                        cat_id = data['cat_id'];
+
+                        if (cat_id !== "") {
+                            $.ajax({
+                                url: "{% url 'policy:brand-model' %}",
+                                type: "POST",
+                                cache: false,
+                                data: {'id': cat_id, 'ctm_id': 1, 'slab_codes': ''},
+                                dataType: 'json',
+                                beforeSend: function () {
+                                    $('#brand').html('');
+                                    $('#brand').append($('<option value="0">Select a Brand</option>'));
+                                    $('#ajax-loader-fullpage').show();
+                                },
+                                success: function (data) {
+                                    // brand_list(data, brand_name, model_name)
+                                    // console.log(data)
+                                    console.log("get Make response Start:: ");
+                                    console.log(data);
+                                    console.log("get Make response End:: ");
+                                    Object.keys(data).forEach(function (key) {
+                                        make_id = data[key].make_id;
+                                        make_name = data[key].make_name;
+                                        make_code = data[key].make_code;
+                                        $('#brand').append($('<option>', {value: make_name, text: make_name}));
+                                    });
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    console.log(jqXHR);
+                                    console.log(textStatus);
+                                    console.log(errorThrown);
+                                },
+                                complete: function (data) {
+                                    $('#ajax-loader-fullpage').hide();
+                                    //setTimeout(function(){
+                                    // $('#promo_code_btn').attr('disabled',false);
+                                    // }, 2000);
+                                }
                             });
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR);
-                        console.log(textStatus);
-                        console.log(errorThrown);
-                    },
-                    complete:function(data){
-                        $('#ajax-loader-fullpage').hide();
-                        //setTimeout(function(){
-                            // $('#promo_code_btn').attr('disabled',false);
-                        // }, 2000);
-                    }
+                        } else {
+                            $('#brand').html('');
+                            $('#brand').append($('<option value="0">Select a Brand</option>'));
+                        }
+                    });
+            });
+        })
+
+
+        function get_brand_models(){
+        var $select = $('#model');
+        $('.selectpicker').selectpicker({style: 'btn btn-primary btn-round'});
+        $select.html('');
+        $select.append($('<option>',{value: "0", text :"Select a Model"}));
+        $('#ajax-loader-fullpage').show();
+
+
+        $.ajax({
+            type:"POST",
+            url: "{% url 'policy:get-model' %}",
+            data:  {'category_id': cat_id, 'brand':$("#brand").val()},
+            dataType: 'json',
+            async: false,
+            success : function(response) {
+                item_data = response.responseData
+                console.log("\n\n\n");
+                console.log("get models response Start:: ");
+                console.log(item_data);
+                console.log("get models response End:: ");
+                Object.keys(item_data).forEach(function (item) {
+                  $select.append($('<option>',{value: item_data[item].item_name, text : item_data[item].item_name}));
                 });
-            }else{
-                $('#brand').html('');
-                $('#brand').append($('<option value="0">Select a Brand</option>'));
+            },
+            error: function() {
+                alert('Error occured');
             }
-        });        
-    });
-})
-</script>
+        });
+    }
+    </script>
 {% endblock extra_scripts %}
