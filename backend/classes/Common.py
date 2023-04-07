@@ -54,7 +54,7 @@ class Common:
                 'PAD12M': '12 months AD',
                 'PAD24M': '24 months AD',
                 'PAD24MEW12M': '2 Years AD + 12 Months EW',
-                'PPWGPI12M': '12 months PW GGC Plus India',
+                'PPWGPI12M': '12 months PW GCC Plus India',
                 'PEWGPI12M': '12 months EW GCC Plus India',
                 'PEWGPI24M': '24 months EW GCC Plus India',
             },
