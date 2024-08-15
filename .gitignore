@@ -101,6 +101,10 @@ venv.bak/
 /site
 
 # mypy
+.gitignore
 .mypy_cache/
-__pycache__/
 !**/__pycache__/
+mis-env/
+.idea/
+.gitignore/
+requirements.txt
