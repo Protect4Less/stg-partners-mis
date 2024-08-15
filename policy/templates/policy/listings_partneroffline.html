@@ -28,18 +28,22 @@
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="x_panel">
                         <div class="x_content">
-                            <table id="datatable" class="table table-striped table-bordered">
+                            <table id="datatable" class="table table-striped table-bordered reversed">
                                 <thead>
                                 <tr>
                                     <th>Transaction Id</th>
-                                    <th>Policy No.</th>
                                     <th>Invoice Number</th>
-                                    <th>Device</th>
+                                    <th>Policy No.</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Term Type</th>
+
                                     <th>Sub Device</th>
                                     <th>Brand</th>
                                     <th>Model</th>
-                                    <th>Term Type</th>
+                                    <th>Imei/serial_no</th>
                                     <th>Purchase Date</th>
+
                                     <th>First Name</th>
                                     <th>Last Name</th>
                                     <th>Email ID</th>
@@ -52,20 +56,24 @@
                                     {% for data in partneroffline_data %}
                                         <tr>
                                             <td>{{ data.popd_id }}</td>
-                                            <td>{% if data.popd_policy_no %}{{ data.popd_policy_no }}{% else %}In
-                                                Progress{% endif %}</td>
                                             <td>{{ data.popd_invoice_no }}</td>
-                                            <td>{{ data.popd_device }}</td>
+                                            <td>{% if data.popd_policy_no %}{{ data.popd_policy_no }}{% else %}In Progress{% endif %}</td>
+                                            <td>{{ data.up_policy_starton }}</td>
+                                            <td>{{ data.up_policy_endon }}</td>
+                                            <td>{{ data.popd_term_type }}</td>
+
+
                                             <td>{{ data.popd_sub_device }}</td>
                                             <td>{{ data.popd_brand }}</td>
                                             <td>{{ data.popd_model }}</td>
-                                            <td>{{ data.popd_term_type }}</td>
+                                            <td>{{ data.popd_imei_serial_no	 }}</td>
                                             <td>{{ data.popd_purchase_month }}</td>
+
                                             <td>{{ data.popd_first_name }}</td>
                                             <td>{{ data.popd_last_name }}</td>
                                             <td>{{ data.popd_email }}</td>
                                             <th>{{ data.popd_comment }}</th>
-                                            <td>{{ data.popd_status }}</td>
+                                            <td>{{ data.up_policy_status_name }}</td>
                                         </tr>
                                     {% endfor %}
                                 {% else %}
@@ -85,5 +93,5 @@
 {% endblock content %}
 {% block extra_scripts %}
     <!-- jQuery Smart Wizard -->
-    <script src="{% static 'js/jQuery-Smart-Wizard/jquery.smartWizard.js' %}"></script>
+<!--    <script src="{% static 'js/jQuery-Smart-Wizard/jquery.smartWizard.js' %}"></script>-->
 {% endblock extra_scripts %}

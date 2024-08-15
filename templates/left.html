@@ -1,19 +1,25 @@
 {% load static %}
 <div class="left_col scroll-view">
 	<div class="navbar nav_title" style="border: 0;">
-		<a href="/" class="site_title"><span>PROTECT4LESS</span></a>
+		<a href="{% if partner_code == '1071' %}{% url 'policy:initiate' %}{% else %}/{% endif %}" class="site_title text-center"><span>Protect4Less</span></a>
 	</div>
 	<div class="clearfix"></div>
 	<!-- menu profile quick info -->
+
+	{% if partner_code == '1079' %}
+	<img src="{% static 'images/istyle.png'%}" alt="istyle logo image" style="width: 100%">
+	{% endif %}
+
 	<div class="profile clearfix">
+		{% if partner_code not in '1079' %}
 		<div class="profile_pic">
-<!--			<img src="{% static 'images/p4l_192x192.png'%}" alt="PROTECT4LESS" class="img-circle profile_img">-->
-			<img src="{% static 'images/papita_logo.png'%}" alt="PROTECT4LESS" class="img-circle profile_img">
+			<img src="{% static 'images/p4l_192x192.png'%}" alt="PROTECT4LESS" class="img-circle profile_img">
 		</div>
+		{% endif %}
 
 		<div class="profile_info">
-			<span>Welcome,</span>
-			<h2>{% if partner_code == '1071' %}Papita Trading LLC{% else %}{{ request.user.first_name }}{% endif %}</h2>
+			<span style="margin-left: 12px">Welcome,</span>
+			<h2 class="text-center">{% if partner_code == '1071' %}Papita Trading LLC{% else %}{{ request.user.first_name }}{% endif %}</h2>
 		</div>
 	</div>
 
@@ -24,15 +30,12 @@
 <!--		</div>-->
 <!--	</div>-->
 
-
-	<!-- /menu profile quick info -->
-	<br>
-
 	<!-- sidebar menu -->
 	<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
 		<div class="menu_section">
 			<!-- <h3>General</h3> -->
 			<ul class="nav side-menu">
+                {% comment %}
 				<li>
 					<!-- This check is for Quix Partner - Promoter user. This type of user cannot see the Detailed Report -->
 					{% if request.user.id != 36 %}
@@ -42,26 +45,38 @@
 						<li><a href="{% url 'sales:statistics' %}">Statistics</a></li>
 					</ul> -->
 				</li>
-				{% if partner_code == '1041' or partner_code == '1032' or partner_code == '1034' or partner_code == '1035' or partner_code == '1036' or partner_code == '1042' or partner_code == '1071' %}
+                {% endcomment %}
+
+				{% if partner_code in '1041,1032,1034,1035,1036,1042,1071,1005' %}
                 <li>
 					<a><i class="fa fa-table"></i> Policy <span class="fa fa-chevron-down"></span></a>
 					<ul class="nav child_menu">
 						{% if partner_code != '1034' %}<li><a href="{% url 'policy:initiate' %}">Initiate</a></li>{% endif %}
-
-                        {% if partner_code == '1041' or partner_code == '1032' or partner_code == '1071' %}
-                        <li><a href="{% url 'policy:listings' %}">Listings</a></li>
-                        {% endif %}
-
+                        {% if partner_code == '1041' or partner_code == '1032' %}<li><a href="{% url 'policy:listings' %}">Listings</a></li>{% endif %}
 						{% if partner_code == '1034' %}<li><a href="{% url 'policy:bulk-upload' %}">Bulk Upload</a></li>{% endif %}
+						{% if partner_code == '1079' %}<li><a href="{% url 'policy:initiate_policy_lebanon' %}">Initiate Policy</a></li>{% endif %}
 					</ul>
 				</li>
 				{% endif %}
-				{% comment %}
+
+				{% if partner_code in '1079' %}
+                <li>
+					<a href="{% url 'policy:initiate_policy_lebanon' %}">
+						<i class="fa fa-table"></i>
+						Create Policy
+					</a>
+				</li>
+				{% endif %}
+
 				<li>
 					<!-- This tab is for the all the Policy Purchased Report -->
 					<a href="{% url 'policy:listings' %}"><i class="fa fa-bar-chart"></i>Policy Transaction</a>
 				</li>
-				{% endcomment %}
+
+				<li>
+					<!-- This tab is for the all the Policy Purchased Report -->
+					<a href="{% url 'policy:download_report' %}"><i class="fa fa-file" aria-hidden="true"></i>Reports</a>
+				</li>
 
 				<!-- <li>
 					<a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>

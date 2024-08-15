@@ -1,11 +1,53 @@
-from django.shortcuts import render, redirect
+import csv
+import io
+import json
+
+from backend.classes.InitInfo import InitInfo
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.views import View
 from django.views.decorators.csrf import csrf_exempt
-from backend.classes.InitInfo import InitInfo
-from .helper import *
-import csv, io
-from django.contrib import messages
+from policy.helper import *
+
+
+class InitiatePolicyLebanon(View):
+
+    def get(self, request):
+
+        init_info = InitInfo.init(request)
+        partner_code = init_info['partner_code']
+        if partner_code:
+            request.session['partner_code'] = partner_code
+            self.partner_code = partner_code
+        template_name = 'policy/lebanon_insert_popd_form.html'
+
+        category_dropdown = helper_get_category(partner_code)
+        plan_type_dropdown = helper_plan_type(partner_code)
+
+        context = {
+            "category_dropdown": category_dropdown,
+            "plan_type_dropdown": plan_type_dropdown,
+            'partner_code': partner_code,
+            'partner_location': init_info['partner_location'] if init_info['partner_location'] else "",
+        }
+
+        return render(request, template_name, context)
+
+    def post(self, request):
+
+        partner_code = request.session.get('partner_code')
+        inserted_id = helper_insert_into_popd_lebanon(request, partner_code)
+        if inserted_id is not None or inserted_id != "":
+            messages.success(request, 'You have successfully submitted the record. We will process your Policy record shortly To check the latest update please check Policy List.')
+            return redirect('policy:listings')
+        else:
+            messages.error(request, 'Oops! Something went wrong while processing the data. Please contact Protect4Less Technical Team.')
+
+        context = {}
+        template_name = 'policy/lebanon_insert_popd_form.html'
+        return render(request, template_name, context)
 
 
 def initiate(request):
@@ -30,7 +72,7 @@ def initiate(request):
         if request.method == 'POST':
             inserted_id = helper_insert_into_partneroffline(request, partner_code)
             if inserted_id is not None or inserted_id != "":
-                messages.success(request, 'You have successfuly submited the record. We will process your Policy record shortly To check the latest update please check Policy List.')
+                messages.success(request, 'You have successfully submitted the record. We will process your Policy record shortly To check the latest update please check Policy List.')
                 return redirect('policy:listings')
             else:
                 messages.error(request, 'Oops! Something went wrong while processing the data. Please contact Protect4Less Technical Team.')
@@ -88,8 +130,21 @@ def get_model_ajax(request):
         error = error if error is not None else "No data found" if len(model) == 0 else None
 
     if error is None:
-        response_data = model
+        # response_data = model
+        partner_code = request.session.get('partner_code', None)
 
+        if partner_code and int(category_id) == 22:
+            seperated_models_to_send = []
+            seperated_models = ["iPhone SE", "iPhone 11", "iPhone 12", "iPhone 13", "iPhone 14", "iPhone 15"]
+            for s_model in seperated_models:
+                for d_dict in model:
+                    for k, v in d_dict.items():
+                        if k == 'item_name':
+                            if s_model.lower() in v.lower() and model not in seperated_models_to_send:
+                                seperated_models_to_send.append(d_dict)
+            response_data = seperated_models_to_send
+        else:
+            response_data = model
     status = True if error is None else False
 
     response = {
@@ -98,6 +153,7 @@ def get_model_ajax(request):
         "message": error,
         "messageDesc": "",
         "responseData": response_data,
+        # "partner_code": partner_code,
     }
     return JsonResponse(response)
 
@@ -199,8 +255,8 @@ def listings(request):
 
     if partner_code != "" and is_payment_link_generation_partner is False:
         template_name = 'policy/listings_partneroffline.html'
-        partneroffline_data = helper_get_partneroffline_data(request, partner_code)
-        print('partneroffline_data==', partneroffline_data)
+        partneroffline_data = custom_list_view(partner_code)
+        # print('partneroffline_data==', partneroffline_data)
         context = {'partneroffline_data': partneroffline_data, 'partner_code': partner_code}
         return render(request, template_name, context)
 
@@ -344,3 +400,17 @@ def bulk_upload(request):
     context = {'bsquaredwifi_data':bsquaredwifi_data, 'partner_code':partner_code}
     template_name = 'policy/bulk_upload_bsquaredwifi.html'
     return render(request,template_name,context)
+
+
+def download_report(request):
+    init_info = InitInfo.init(request)
+    partner_code = init_info['partner_code']
+
+    start_date = request.POST.get('start_date')
+    end_date = request.POST.get('end_date')
+
+    print("start_date \t:", start_date)
+    print("end_date \t:", end_date)
+
+    context = {'partner_code': partner_code}
+    return render(request, 'policy/download_report.html', context)

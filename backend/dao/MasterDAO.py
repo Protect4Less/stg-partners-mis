@@ -139,7 +139,7 @@ class MasterDAO():
 			for k,v in condition.items():
 				if "#" in k:
 					column_name, column_condition = k.split("#")
-					if(column_condition == "IN"):
+					if column_condition == "IN":
 						sql_condition += column_name+" "+column_condition+" ("+str(v)+") AND "
 					else:	
 						sql_condition += column_name+" "+column_condition+" "+str(v)+" AND "

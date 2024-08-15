@@ -29,13 +29,7 @@
                             <input type="text" id="invoice_number" name="invoice_number" class="form-control col-md-7 col-xs-12" required="required" autocomplete="off">
                             </div>
                         </div>
-                        {% comment %}<div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sku">SKU <span class="required">*</span>
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="sku" name="sku" class="form-control col-md-7 col-xs-12">
-                            </div>
-                        </div>{% endcomment %}
+
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="location">Location <span class="required">*</span>
                             </label>
@@ -277,12 +271,14 @@
                 console.log("get models response Start:: ");
                 console.log(item_data);
                 console.log("get models response End:: ");
+
+                console.log('\n\n');
                 Object.keys(item_data).forEach(function (item) {
                   $select.append($('<option>',{value: item_data[item].item_name, text : item_data[item].item_name}));
                 });
             },
             error: function() {
-                alert('Error occured');
+                alert('Error occurred');
             }
         });
     }

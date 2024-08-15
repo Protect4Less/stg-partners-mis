@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Policy >> Initiate Policy</h3>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_content">
+                        <br/>
+                        <form id="submit_policy_details" action="" method="POST" data-parsley-validate class="form-horizontal form-label-left">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="invoice_number">Invoice Number <span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="invoice_number" name="invoice_number" class="form-control col-md-7 col-xs-12" required="required" autocomplete="off" value="12345">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="purchase_date">Purchase Date <span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6 col-xs-12 input-group date" id='myDatepicker'>
+                                    <input type="text" id="purchase_date" name="purchase_date" class="form-control col-md-7 col-xs-12" required="required" autocomplete="off">
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="imei_serial_no">Imei / Serial Number <span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="imei_serial_no" name="imei_serial_no" class="form-control col-md-7 col-xs-12" required="required" autocomplete="off" value="12345">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="location">Location <span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control col-md-7 col-xs-12" name="location" id="location" required>
+                                        <option value="">Select a Location</option>
+                                        <option value="iraq">Iraq</option>
+                                        <option value="morocco">Morocco</option>
+                                        <option value="lebanon" selected>Lebanon</option>
+                                        <option value="oman">Oman</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="category">Device <span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control" id="category" name="category" required>
+                                        <option value="">Select a Device</option>
+                                        {% if category_dropdown %} {% for key, value in category_dropdown.items %}
+                                        <option value="{{ key }}" {% if value == 'Mobile Phone' %}selected{% endif %}>{{ value }}</option>{% endfor %} {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="brand">Brand <span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" id="brand" name="brand" value="Apple" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="model">Model <span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control col-md-7 col-xs-12" name="model" id="model" required>
+                                        <option value="">Select a Model</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first_name">First Name<span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="first_name" name="first_name" class="form-control col-md-7 col-xs-12" required="required" autocomplete="off" value="12345">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last_name">Last Name <span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="last_name" name="last_name" class="form-control col-md-7 col-xs-12" required="required" autocomplete="off" value="12345">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email_id" class="control-label col-md-3 col-sm-3 col-xs-12">Email ID <span
+                                        class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input id="email_id" name="email_id" class="form-control col-md-7 col-xs-12" type="email" required="required" autocomplete="off" value="sksfaridi@gmail.com">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="mobile_number">Mobile Number <span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="number" id="mobile_number" name="mobile_number" class="form-control col-md-7 col-xs-12" required="required" autocomplete="off" value="9082075591">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="term_type">Term Type <span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control" id="term_type" name="term_type" required>
+                                        <option value="">Choose Term Type</option>
+                                        {% if plan_type_dropdown %}
+                                        {% for key, value in plan_type_dropdown.items %}
+                                        <option value="{{value}}">{{ value }}</option>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="device_value">Device Value (Excluding Taxes)<span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="device_value" name="device_value" class="form-control col-md-7 col-xs-12" required="required" autocomplete="off" value="12345">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="device_currency">Device Currency <span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="device_currency" name="device_currency" class="form-control col-md-7 col-xs-12" required="required" value="USD" readonly>
+                                </div>
+                            </div>
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <input class="btn btn-primary" value="Reset" type="button" onclick="this.form.reset();">
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+{% endblock content %}
+{% block extra_scripts %}
+<!-- Parsley -->
+<script src="{% static 'js/parsleyjs/dist/parsley.min.js'%}"></script>
+<!-- jQuery Smart Wizard -->
+<script src="{% static 'js/jQuery-Smart-Wizard/jquery.smartWizard.js' %}"></script>
+
+<script type="text/javascript">
+
+    $(window).on('load', get_brand_models() )
+
+
+    function get_brand_models() {
+        var $select = $('#model');
+        $('.selectpicker').selectpicker({style: 'btn btn-primary btn-round'});
+        $select.html('');
+        $select.append($('<option>', {value: "0", text: "Select a Model"}));
+        $('#ajax-loader-fullpage').show();
+
+        var cat_id = $("#category").val().split(':')[0]
+        console.log('cat_id \t:')
+        console.log(cat_id)
+        console.log('brand \t:')
+        console.log($("#brand").val())
+
+
+        $.ajax({
+            type: "POST",
+            url: "{% url 'policy:get-model' %}",
+            data: {'category_id': cat_id, 'brand': $("#brand").val()},
+            dataType: 'json',
+            async: false,
+            success: function (response) {
+                item_data = response.responseData
+                console.log("\n\n\n");
+                console.log("get models response Start:: ");
+                console.log(item_data);
+                console.log("get models response End:: ");
+                console.log(response.partner_code);
+                console.log(response.error);
+                console.log('\n\n');
+                Object.keys(item_data).forEach(function (item) {
+                    $select.append($('<option>', {value: item_data[item].item_name, text: item_data[item].item_name}));
+                });
+            },
+            error: function () {
+                alert('Error occurred');
+            }
+        });
+    }
+</script>
+{% endblock extra_scripts %}
