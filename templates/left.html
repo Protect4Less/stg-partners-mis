@@ -56,11 +56,12 @@
 						{% if partner_code == '1034' %}<li><a href="{% url 'policy:bulk-upload' %}">Bulk Upload</a></li>{% endif %}
 						{% if partner_code == '1079' %}<li><a href="{% url 'policy:initiate_policy_lebanon' %}">Initiate Policy</a></li>{% endif %}
 						{% if partner_code == '1081' %}<li><a href="{% url 'policy:initiate_policy_oman' %}">Initiate Policy</a></li>{% endif %}
+						{% if partner_code == '1080' %}<li><a href="{% url 'policy:initiate_policy_morocco' %}">Initiate Policy</a></li>{% endif %}
 					</ul>
 				</li>
 				{% endif %}
 
-				{% if partner_code in '1079,1081' %}
+				{% if partner_code in '1079,1081,1080' %}
                 <li>
 					{% if partner_code == '1079' %}
 					<a href="{% url 'policy:initiate_policy_lebanon' %}"><i class="fa fa-table"></i>Create Policy</a>
@@ -71,6 +72,9 @@
 					<a href="{% url 'policy:initiate_policy_oman' %}"><i class="fa fa-table"></i>Create Policy</a>
 					{% endif %}
 					
+					{% if partner_code == '1080' %}
+					<a href="{% url 'policy:initiate_policy_morocco' %}"><i class="fa fa-table"></i>Create Policy</a>
+					{% endif %}
 
 
 				</li>
