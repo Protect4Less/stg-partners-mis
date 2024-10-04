@@ -8,6 +8,7 @@ app_name = 'policy'
 urlpatterns = [
     path('initiate', views.initiate, name='initiate'),
     path('initiate_policy_lebanon', login_required(views.InitiatePolicyLebanon.as_view()), name='initiate_policy_lebanon'),
+    path('initiate_policy_oman', login_required(views.InitiatePolicyOman.as_view()), name='initiate_policy_oman'),
     path('listings', views.listings, name='listings'),
     path('bulk-upload', views.bulk_upload, name='bulk-upload'),    
     path('brand-model', views.get_brand_model_ajax, name='brand-model'),

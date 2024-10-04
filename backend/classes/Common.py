@@ -108,6 +108,50 @@ class Common:
                 },
             }
         },
+        "1081": {
+            "prod_id": "5",
+            "geo": "Oman",
+            "plan_type": {
+                'PEW12M': '12 months EW',
+                'PEW24M': '24 months EW',
+                'PEW36M': '36 months EW',
+            },
+            "category_data": {
+                22: 'Iphone',
+                25: 'Ipad',
+                24: 'IWatch',
+                21: 'Mac',
+                'Airpods': 'Airpods',
+            },
+            "price": {
+                "Iphone": {
+                    "12 months EW": {"900_and_below": 25, "901_and_above": 35},
+                    "24 months EW": {"900_and_below": 39, "901_and_above": 55},
+                    "36 months EW": {"900_and_below": 59, "901_and_above": 83}
+                },
+                "Ipad": {
+                    "12 months EW": {"500_and_below": 13, "501_and_700": 18, "7001_and_900": 23, "901_and_above": 33},
+                    "24 months EW": {"500_and_below": 21, "501_and_700": 30, "7001_and_900": 38, "901_and_above": 55},
+                    "36 months EW": {"500_and_below": 27, "501_and_700": 39, "7001_and_900": 50, "901_and_above": 71}
+                },
+                "Mac": {
+                    "12 months EW": {"1000_and_below": 23, "1000_and_1200": 28, "1201_and_1400": 33, "1401_and_1800": 39, "1801_and_2300": 50, "2301_and_2900": 68, "2901_and_above": 90},
+                    "24 months EW": {"1000_and_below": 32, "1000_and_1200": 39, "1201_and_1400": 46, "1401_and_1800": 54, "1801_and_2300": 70, "2301_and_2900": 95, "2901_and_above": 125},
+                    "36 months EW": {"1000_and_below": 50, "1000_and_1200": 55, "1201_and_1400": 72, "1401_and_1800": 80, "1801_and_2300": 100, "2301_and_2900": 130, "2901_and_above": 155},
+                },
+                "IWatch": {
+                    "12 months EW": {"400_and_below": 10, "401_and_800": 11, "801_and_1200": 22, "1201_and_above": 30},
+                    "24 months EW": {"400_and_below": 15, "401_and_800": 17, "801_and_1200": 36, "1201_and_above": 48},
+                    "36 months EW": {"400_and_below": 20, "401_and_800": 27, "801_and_1200": 50, "1201_and_above": 65},
+                },
+                "Airpods": {
+                    "12 months EW": {"500_and_below": 19, "501_and_above": 49},
+                    "24 months EW": {"500_and_below": 19, "501_and_above": 49},
+                    "36 months EW": {"500_and_below": 19, "501_and_above": 49},
+                },
+            }
+        },
+
     }
 
     # Local -> userid : partner_code

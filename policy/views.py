@@ -24,6 +24,9 @@ class InitiatePolicyLebanon(View):
         template_name = 'policy/lebanon_insert_popd_form.html'
 
         category_dropdown = helper_get_category(partner_code)
+        print()
+        print("category_dropdown \t:", category_dropdown)
+        print()
         plan_type_dropdown = helper_plan_type(partner_code)
 
         context = {
@@ -48,7 +51,49 @@ class InitiatePolicyLebanon(View):
         context = {}
         template_name = 'policy/lebanon_insert_popd_form.html'
         return render(request, template_name, context)
+    
 
+
+class InitiatePolicyOman(View):
+
+    def get(self, request):
+
+        init_info = InitInfo.init(request)
+        partner_code = init_info['partner_code']
+        if partner_code:
+            request.session['partner_code'] = partner_code
+            self.partner_code = partner_code
+        template_name = 'policy/lebanon_insert_popd_form.html'
+
+        category_dropdown = helper_get_category(partner_code)
+        print()
+        print("category_dropdown \t:", category_dropdown)
+        print()
+        plan_type_dropdown = helper_plan_type(partner_code)
+
+        context = {
+            "category_dropdown": category_dropdown,
+            "plan_type_dropdown": plan_type_dropdown,
+            'partner_code': partner_code,
+            'partner_location': init_info['partner_location'] if init_info['partner_location'] else "",
+        }
+
+        return render(request, template_name, context)
+
+    def post(self, request):
+
+        partner_code = request.session.get('partner_code')
+        inserted_id = helper_insert_into_popd_oman(request, partner_code)
+        if inserted_id is not None or inserted_id != "":
+            messages.success(request, 'You have successfully submitted the record. We will process your Policy record shortly To check the latest update please check Policy List.')
+            return redirect('policy:listings')
+        else:
+            messages.error(request, 'Oops! Something went wrong while processing the data. Please contact Protect4Less Technical Team.')
+
+        context = {}
+        template_name = 'policy/lebanon_insert_popd_form.html'
+        return render(request, template_name, context)
+    
 
 def initiate(request):
     # print(request.session['partner_code'])

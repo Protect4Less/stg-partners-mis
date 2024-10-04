@@ -43,23 +43,21 @@
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="location">Location <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <select class="form-control col-md-7 col-xs-12" name="location" id="location" required>
-                                        <option value="">Select a Location</option>
-                                        <option value="iraq">Iraq</option>
-                                        <option value="morocco">Morocco</option>
-                                        <option value="lebanon" selected>Lebanon</option>
-                                        <option value="oman">Oman</option>
-                                    </select>
+                                    <span class="form-control col-md-7 col-xs-12">Oman</span>
                                 </div>
                             </div>
+                            
 
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="category">Device <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <select class="form-control" id="category" name="category" required>
                                         <option value="">Select a Device</option>
-                                        {% if category_dropdown %} {% for key, value in category_dropdown.items %}
-                                        <option value="{{ key }}" {% if value == 'Mobile Phone' %}selected{% endif %}>{{ value }}</option>{% endfor %} {% endif %}
+                                        {% if category_dropdown %} 
+                                        {% for key, value in category_dropdown.items %}
+                                        <option value="{{ key }}" {% if value == 'Mobile Phone' %}selected{% endif %}>{{ value }}</option>
+                                        {% endfor %} 
+                                        {% endif %}
                                     </select>
                                 </div>
                             </div>
