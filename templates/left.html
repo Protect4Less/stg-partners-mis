@@ -6,12 +6,12 @@
 	<div class="clearfix"></div>
 	<!-- menu profile quick info -->
 
-	{% if partner_code == '1079' %}
+	{% if partner_code in '1079, 1081, 1080' %}
 	<img src="{% static 'images/istyle.png'%}" alt="istyle logo image" style="width: 100%">
 	{% endif %}
 
 	<div class="profile clearfix">
-		{% if partner_code not in '1079' %}
+		{% if partner_code not in '1079, 1081, 1080' %}
 		<div class="profile_pic">
 			<img src="{% static 'images/p4l_192x192.png'%}" alt="PROTECT4LESS" class="img-circle profile_img">
 		</div>
@@ -47,7 +47,7 @@
 				</li>
                 {% endcomment %}
 
-				{% if partner_code in '1041,1032,1034,1035,1036,1042,,1005' %}
+				{% if partner_code in '1041,1032,1034,1035,1036,1042,1071,1005' %}
                 <li>
 					<a><i class="fa fa-table"></i> Policy <span class="fa fa-chevron-down"></span></a>
 					<ul class="nav child_menu">
@@ -55,28 +55,16 @@
                         {% if partner_code == '1041' or partner_code == '1032' %}<li><a href="{% url 'policy:listings' %}">Listings</a></li>{% endif %}
 						{% if partner_code == '1034' %}<li><a href="{% url 'policy:bulk-upload' %}">Bulk Upload</a></li>{% endif %}
 						{% if partner_code == '1079' %}<li><a href="{% url 'policy:initiate_policy_lebanon' %}">Initiate Policy</a></li>{% endif %}
-						{% if partner_code == '1081' %}<li><a href="{% url 'policy:initiate_policy_oman' %}">Initiate Policy</a></li>{% endif %}
-						{% if partner_code == '1080' %}<li><a href="{% url 'policy:initiate_policy_morocco' %}">Initiate Policy</a></li>{% endif %}
 					</ul>
 				</li>
 				{% endif %}
 
 				{% if partner_code in '1079,1081,1080' %}
                 <li>
-					{% if partner_code == '1079' %}
-					<a href="{% url 'policy:initiate_policy_lebanon' %}"><i class="fa fa-table"></i>Create Policy</a>
-					{% endif %}
-					
-					
-					{% if partner_code == '1081' %}
-					<a href="{% url 'policy:initiate_policy_oman' %}"><i class="fa fa-table"></i>Create Policy</a>
-					{% endif %}
-					
-					{% if partner_code == '1080' %}
-					<a href="{% url 'policy:initiate_policy_morocco' %}"><i class="fa fa-table"></i>Create Policy</a>
-					{% endif %}
-
-
+					<a href="{% url 'policy:initiate_policy_iStyle' %}">
+						<i class="fa fa-table"></i>
+						Create Policy
+					</a>
 				</li>
 				{% endif %}
 

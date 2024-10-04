@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from policy.helper import *
 
 
-class InitiatePolicyLebanon(View):
+class InitiatePolicyIstyle(View):
 
     def get(self, request):
 
@@ -21,129 +21,43 @@ class InitiatePolicyLebanon(View):
         if partner_code:
             request.session['partner_code'] = partner_code
             self.partner_code = partner_code
-        template_name = 'policy/lebanon_insert_popd_form.html'
 
-        category_dropdown = helper_get_category(partner_code)
-        print()
-        print("category_dropdown \t:", category_dropdown)
-        print()
-        plan_type_dropdown = helper_plan_type(partner_code)
+        template_name = None
+        plan_type_dropdown = None
+        if partner_code == "1079":
+            template_name = 'policy/lebanon_insert_popd_form.html'
+
+        if partner_code in ["1080", "1081"]:
+            template_name = 'policy/iStyle_oman_create_policy.html'
 
         context = {
-            "category_dropdown": category_dropdown,
-            "plan_type_dropdown": plan_type_dropdown,
+            "category_dropdown": helper_get_category(partner_code),
+            "plan_type_dropdown": helper_plan_type(partner_code),
             'partner_code': partner_code,
             'partner_location': init_info['partner_location'] if init_info['partner_location'] else "",
         }
-
         return render(request, template_name, context)
 
     def post(self, request):
 
         partner_code = request.session.get('partner_code')
-        inserted_id = helper_insert_into_popd_lebanon(request, partner_code)
+        inserted_id = None
+
+        if partner_code == '1079':
+            inserted_id = helper_insert_into_popd_lebanon(request, partner_code)
+
+        if partner_code in ["1080", "1081"]:
+            inserted_id = helper_insert_into_popd_istyle_oman(request, partner_code)
+
         if inserted_id is not None or inserted_id != "":
-            messages.success(request, 'You have successfully submitted the record. We will process your Policy record shortly To check the latest update please check Policy List.')
+            messages.success(request, 'Your record has been successfully submitted. We will process your policy record shortly. To check the latest update, please refer to the Policy List.')
             return redirect('policy:listings')
         else:
             messages.error(request, 'Oops! Something went wrong while processing the data. Please contact Protect4Less Technical Team.')
-
-        context = {}
-        template_name = 'policy/lebanon_insert_popd_form.html'
-        return render(request, template_name, context)
     
 
 
-class InitiatePolicyOman(View):
 
-    def get(self, request):
-
-        init_info = InitInfo.init(request)
-        partner_code = init_info['partner_code']
-        if partner_code:
-            request.session['partner_code'] = partner_code
-            self.partner_code = partner_code
-        template_name = 'policy/lebanon_insert_popd_form.html'
-
-        category_dropdown = helper_get_category(partner_code)
-        print()
-        print("category_dropdown \t:", category_dropdown)
-        print()
-        plan_type_dropdown = helper_plan_type(partner_code)
-
-        context = {
-            "category_dropdown": category_dropdown,
-            "plan_type_dropdown": plan_type_dropdown,
-            'partner_code': partner_code,
-            'partner_location': init_info['partner_location'] if init_info['partner_location'] else "",
-        }
-
-        return render(request, template_name, context)
-
-    def post(self, request):
-
-        partner_code = request.session.get('partner_code')
-        inserted_id = helper_insert_into_popd_oman(request, partner_code)
-        if inserted_id is not None or inserted_id != "":
-            messages.success(request, 'You have successfully submitted the record. We will process your Policy record shortly To check the latest update please check Policy List.')
-            return redirect('policy:listings')
-        else:
-            messages.error(request, 'Oops! Something went wrong while processing the data. Please contact Protect4Less Technical Team.')
-
-        context = {}
-        template_name = 'policy/lebanon_insert_popd_form.html'
-        return render(request, template_name, context)
-    
-
-class InitiatePolicyMorocco(View):
-
-    def get(self, request):
-
-        init_info = InitInfo.init(request)
-        partner_code = init_info['partner_code']
-
-        if partner_code:
-            request.session['partner_code'] = partner_code
-            self.partner_code = partner_code
-
-        # if partner_code == '1081':
-        #     partner_location = 'Oman'
-        # elif partner_code == '1080':
-        #     partner_location = 'Morocco'
-        # else:
-        #     partner_location = 'Unknown'
-            
-        template_name = 'policy/morocco_insert_popd_form.html'
-
-        category_dropdown = helper_get_category(partner_code)
-        print()
-        print("category_dropdown \t:", category_dropdown)
-        print()
-        plan_type_dropdown = helper_plan_type(partner_code)
-
-        context = {
-            "category_dropdown": category_dropdown,
-            "plan_type_dropdown": plan_type_dropdown,
-            'partner_code': partner_code,
-            # 'partner_location': partner_location,
-            'partner_location': init_info['partner_location'] if init_info['partner_location'] else "",
-        }
-
-        return render(request, template_name, context)
-
-    def post(self, request):
-
-        partner_code = request.session.get('partner_code')
-        inserted_id = helper_insert_into_popd_morocco(request, partner_code)
-        if inserted_id is not None or inserted_id != "":
-            messages.success(request, 'You have successfully submitted the record. We will process your Policy record shortly To check the latest update please check Policy List.')
-            return redirect('policy:listings')
-        else:
-            messages.error(request, 'Oops! Something went wrong while processing the data. Please contact Protect4Less Technical Team.')
-
-        context = {}
-        template_name = 'policy/morocco_insert_popd_form.html'
-        return render(request, template_name, context)
     
 
 def initiate(request):
@@ -250,6 +164,21 @@ def get_model_ajax(request):
         "messageDesc": "",
         "responseData": response_data,
         # "partner_code": partner_code,
+    }
+    return JsonResponse(response)
+@csrf_exempt
+def get_term_type_ajax(request):
+    partner_code = request.session.get('partner_code')
+    error = 'Invalid Request Type' if not request.POST else None
+    error = error if error else 'Request is not Ajax Type' if not request.is_ajax else None
+    category = request.POST.get('category', None)
+    plan_types_dropdown = Common.partner_dict[partner_code]["plan_types"][category]
+
+    status = True if error is None else False
+    response = {
+        "status": ("OK" if status else "NOK"),
+        "message": error,
+        "responseData": plan_types_dropdown,
     }
     return JsonResponse(response)
 
