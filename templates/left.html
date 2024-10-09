@@ -6,12 +6,12 @@
 	<div class="clearfix"></div>
 	<!-- menu profile quick info -->
 
-	{% if partner_code in '1079, 1081, 1080' %}
+	{% if partner_code in '1079, 1081, 1080, 1085' %}
 	<img src="{% static 'images/istyle.png'%}" alt="istyle logo image" style="width: 100%">
 	{% endif %}
 
 	<div class="profile clearfix">
-		{% if partner_code not in '1079, 1081, 1080' %}
+		{% if partner_code not in '1079, 1081, 1080, 1085' %}
 		<div class="profile_pic">
 			<img src="{% static 'images/p4l_192x192.png'%}" alt="PROTECT4LESS" class="img-circle profile_img">
 		</div>
@@ -59,7 +59,7 @@
 				</li>
 				{% endif %}
 
-				{% if partner_code in '1079,1081,1080' %}
+				{% if partner_code in '1079,1081,1080,1085' %}
                 <li>
 					<a href="{% url 'policy:initiate_policy_iStyle' %}">
 						<i class="fa fa-table"></i>

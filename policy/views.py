@@ -27,7 +27,7 @@ class InitiatePolicyIstyle(View):
         if partner_code == "1079":
             template_name = 'policy/lebanon_insert_popd_form.html'
 
-        if partner_code in ["1080", "1081"]:
+        if partner_code in ["1080", "1081", "1085"]:
             template_name = 'policy/iStyle_oman_create_policy.html'
 
         context = {
@@ -46,7 +46,7 @@ class InitiatePolicyIstyle(View):
         if partner_code == '1079':
             inserted_id = helper_insert_into_popd_lebanon(request, partner_code)
 
-        if partner_code in ["1080", "1081"]:
+        if partner_code in ["1080", "1081", "1085"]:
             inserted_id = helper_insert_into_popd_istyle_oman(request, partner_code)
 
         if inserted_id is not None or inserted_id != "":
