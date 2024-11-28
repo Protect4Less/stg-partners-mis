@@ -113,13 +113,15 @@
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="device_value">Device Value (Excluding Taxes)<span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="text" id="device_value" name="device_value" class="form-control col-md-7 col-xs-12" required="required" autocomplete="off">
+                                    <input type="number" id="device_value" name="device_value" class="form-control col-md-7 col-xs-12" 
+                                           required="required" autocomplete="off" step="any">
                                 </div>
                             </div>
+                            
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="device_currency">Device Currency <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="text" id="device_currency" name="device_currency" class="form-control col-md-7 col-xs-12" required="required" value="USD" readonly>
+                                    <input type="text" id="device_currency" name="device_currency" class="form-control col-md-7 col-xs-12" required="required" value="{% if partner_code == '1080' %}USD{% elif partner_code == '1081' %}OMR{% elif partner_code == '1085' %}USD{% endif %}" readonly>
                                 </div>
                             </div>
                             <div class="ln_solid"></div>
