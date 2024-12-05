@@ -8,8 +8,11 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from policy.helper import *
+import pandas as pd 
+
 
 
 class InitiatePolicyIstyle(View):
@@ -428,14 +431,73 @@ def bulk_upload(request):
 
 
 def download_report(request):
+
     init_info = InitInfo.init(request)
     partner_code = init_info['partner_code']
-
-    start_date = request.POST.get('start_date')
-    end_date = request.POST.get('end_date')
-
-    print("start_date \t:", start_date)
-    print("end_date \t:", end_date)
-
     context = {'partner_code': partner_code}
+    
+    if request.method == 'POST':
+        start_date = request.POST.get('start_date').replace('-', '')
+        end_date = request.POST.get('end_date').replace('-', '')
+
+        print(f"Start Date: {start_date}, End Date: {end_date}")
+
+        cursor = connection.cursor()
+        
+        query = f"""
+            SELECT * 
+            FROM {config('P4L_DB_NAME')}.subscription 
+            WHERE s_partner_code = {partner_code}
+            AND s_sub_date BETWEEN {start_date} AND {end_date}
+        """
+
+        print(f"\n\n Sub - query:{query}\n\n")
+        
+        cursor.execute(query)
+        columns = [col[0] for col in cursor.description]
+        subscription_data =  [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+        # print("subscription_data \t:", subscription_data), print('\n\n')
+        
+        sub_id_list = []
+        for row in subscription_data:
+            sub_id_list.append(row.get('s_id'))
+
+        sub_id_tuple = tuple(sub_id_list)
+        
+        print(f"sub_id_tuple \t: {sub_id_tuple}")
+
+        if sub_id_tuple:
+            query_policy = f"""
+                SELECT *
+                FROM {config('P4L_DB_NAME')}.policy_userpolicy
+                WHERE up_s_id IN {sub_id_tuple}
+            """
+
+            print(f"\n\nPolicy Query: {query_policy}\n\n")
+
+            cursor.execute(query_policy)
+            columns = [col[0] for col in cursor.description]
+            policy_data =  [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+            print("\n", "policy_data \t:", policy_data, "\n")
+    
+            # Excel Data
+            df = pd.DataFrame(policy_data)
+            print(f"DataFrame:\n{df.head()}")
+            
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename="report.xlsx"'
+            with pd.ExcelWriter(response, engine='openpyxl') as writer:
+                df.to_excel(writer, index=False, sheet_name='Report')
+
+            cursor.close()
+            connection.close()
+
+            return response
+        else:
+            # context["msg"] = "No Data Available for selected dates!"
+            messages.error(request, 'No Data Available for selected dates!')
+
     return render(request, 'policy/download_report.html', context)
+
