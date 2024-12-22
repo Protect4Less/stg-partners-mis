@@ -437,6 +437,8 @@ def download_report(request):
     context = {'partner_code': partner_code}
     
     if request.method == 'POST':
+        start_date_str = request.POST.get('start_date')
+        end_date_str = request.POST.get('end_date')
         start_date = request.POST.get('start_date').replace('-', '')
         end_date = request.POST.get('end_date').replace('-', '')
 
@@ -451,7 +453,7 @@ def download_report(request):
             AND s_sub_date BETWEEN {start_date} AND {end_date}
         """
 
-        print(f"\n\n Sub - query:{query}\n\n")
+        # print(f"\n\n Sub - query:{query}\n\n")
         
         cursor.execute(query)
         columns = [col[0] for col in cursor.description]
@@ -465,7 +467,7 @@ def download_report(request):
 
         sub_id_tuple = tuple(sub_id_list)
         
-        print(f"sub_id_tuple \t: {sub_id_tuple}")
+        # print(f"sub_id_tuple \t: {sub_id_tuple}")
 
         if sub_id_tuple:
             query_policy = f"""
@@ -480,14 +482,36 @@ def download_report(request):
             columns = [col[0] for col in cursor.description]
             policy_data =  [dict(zip(columns, row)) for row in cursor.fetchall()]
 
-            print("\n", "policy_data \t:", policy_data, "\n")
+            # print("\n", "policy_data \t:", policy_data, "\n")
     
             # Excel Data
             df = pd.DataFrame(policy_data)
-            print(f"DataFrame:\n{df.head()}")
+            column_mapping = {'up_country_code': 'Location',
+                              'up_fullname': 'Full Name',
+                              'up_emailid': 'Email',
+                              'up_mobile': 'Mobile',
+                              'up_device_name': 'Device',
+                              'up_make_code': 'Brand',
+                              'up_item_name': 'Model',
+                              'up_serial_no': 'IMEI/Serial Number',
+                              'up_plan_type': 'Term Type',
+                              'up_invoice_value': 'Invoice Value',
+                              'up_plan_actual_price': 'Plan Price',
+                              'up_plan_tax': 'Plan Tax',
+                              'up_plan_total_price': 'Plan Total Price',
+                              'up_currency': 'Currency',
+                              'up_policy_no': 'Policy Number',
+                              'up_policy_status': 'Policy Status',
+                              'up_addedon': 'Policy Added Date',
+                              'up_policy_starton': 'Policy Start Date',
+                              'up_policy_endon': 'Policy End Date'}
+            df = df[list(column_mapping.keys())]
+            df = df.rename(columns=column_mapping)
+
+            # print(f"DataFrame:\n{df.head()}")
             
             response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = 'attachment; filename="report.xlsx"'
+            response['Content-Disposition'] = f'attachment; filename="Report_From_{start_date_str}_To_{end_date_str}.xlsx"'
             with pd.ExcelWriter(response, engine='openpyxl') as writer:
                 df.to_excel(writer, index=False, sheet_name='Report')
 
@@ -495,9 +519,8 @@ def download_report(request):
             connection.close()
 
             return response
-        else:
-            # context["msg"] = "No Data Available for selected dates!"
-            messages.error(request, 'No Data Available for selected dates!')
-
+        # else:
+        #     messages.error(request, "No subscriptions found for the selected date range. Please try a different range.")
     return render(request, 'policy/download_report.html', context)
 
+ 
